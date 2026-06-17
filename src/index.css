@@ -461,6 +461,32 @@ td span,
   margin-top: 16px;
 }
 
+.subsection-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 24px 0 12px;
+}
+
+.subsection-heading h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  letter-spacing: 0;
+}
+
+.subsection-heading p {
+  margin: 5px 0 0;
+  color: var(--muted);
+}
+
+.subsection-heading span {
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
 table {
   width: 100%;
   min-width: 880px;
@@ -823,8 +849,13 @@ tbody tr:hover {
   .topbar,
   .section-card__header,
   .consultant-section__heading,
+  .subsection-heading,
   .report-panel__header {
     flex-direction: column;
+  }
+
+  .subsection-heading {
+    align-items: flex-start;
   }
 
   .sync-cluster {

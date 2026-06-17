@@ -206,6 +206,7 @@ function App() {
         <PayrollIntelligence
           metrics={data.payrollMetrics}
           payroll={data.payroll}
+          staffShifts={data.payrollStaffShifts}
         />
         <BusinessProjection projection={data.businessProjection} />
         <AiReportsPanel reports={data.reportTemplates} />

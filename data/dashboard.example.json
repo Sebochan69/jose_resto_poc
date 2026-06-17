@@ -62,6 +62,30 @@
       "recommendation": "Trim one dining room staff slot during 2 PM to 5 PM."
     }
   ],
+  "payrollStaffShifts": [
+    {
+      "id": "shift-1",
+      "day": "Monday",
+      "employeeName": "Ana Cruz",
+      "role": "Cashier",
+      "shift": "10:00 AM - 6:00 PM",
+      "regularHours": 8,
+      "overtimeHours": 0,
+      "hourlyRate": 85,
+      "payrollCost": 680
+    },
+    {
+      "id": "shift-2",
+      "day": "Monday",
+      "employeeName": "Marco Santos",
+      "role": "Line Cook",
+      "shift": "9:00 AM - 7:00 PM",
+      "regularHours": 8,
+      "overtimeHours": 2,
+      "hourlyRate": 110,
+      "payrollCost": 1155
+    }
+  ],
   "businessProjection": {
     "projectedNextWeekRevenue": 348500,
     "projectedNextWeekProfit": 80200,

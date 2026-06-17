@@ -57,6 +57,18 @@ export interface PayrollDay {
   recommendation: string;
 }
 
+export interface PayrollStaffShift {
+  id: string;
+  day: string;
+  employeeName: string;
+  role: string;
+  shift: string;
+  regularHours: number;
+  overtimeHours: number;
+  hourlyRate: number;
+  payrollCost: number;
+}
+
 export interface BusinessProjection {
   projectedNextWeekRevenue: number;
   projectedNextWeekProfit: number;
@@ -85,6 +97,7 @@ export interface RestaurantData {
   menuProfitability: MenuItemProfitability[];
   payrollMetrics: PayrollMetric;
   payroll: PayrollDay[];
+  payrollStaffShifts: PayrollStaffShift[];
   businessProjection: BusinessProjection;
   reportTemplates: AiReportTemplate[];
   consultantResponses: Record<string, string>;
@@ -343,6 +356,140 @@ export const mockRestaurantData: RestaurantData = {
       payrollCost: 9500,
       status: "On Track",
       recommendation: "Keep lean Sunday roster unless reservations exceed 70 covers.",
+    },
+  ],
+  payrollStaffShifts: [
+    {
+      id: "shift-1",
+      day: "Monday",
+      employeeName: "Ana Cruz",
+      role: "Cashier",
+      shift: "10:00 AM - 6:00 PM",
+      regularHours: 8,
+      overtimeHours: 0,
+      hourlyRate: 85,
+      payrollCost: 680,
+    },
+    {
+      id: "shift-2",
+      day: "Monday",
+      employeeName: "Marco Santos",
+      role: "Line Cook",
+      shift: "9:00 AM - 7:00 PM",
+      regularHours: 8,
+      overtimeHours: 2,
+      hourlyRate: 110,
+      payrollCost: 1155,
+    },
+    {
+      id: "shift-3",
+      day: "Tuesday",
+      employeeName: "Liza Reyes",
+      role: "Server",
+      shift: "11:00 AM - 8:00 PM",
+      regularHours: 8,
+      overtimeHours: 1,
+      hourlyRate: 90,
+      payrollCost: 833,
+    },
+    {
+      id: "shift-4",
+      day: "Tuesday",
+      employeeName: "Nico Lim",
+      role: "Prep Cook",
+      shift: "8:00 AM - 5:00 PM",
+      regularHours: 8,
+      overtimeHours: 1,
+      hourlyRate: 95,
+      payrollCost: 879,
+    },
+    {
+      id: "shift-5",
+      day: "Wednesday",
+      employeeName: "Mia Garcia",
+      role: "Runner",
+      shift: "12:00 PM - 7:00 PM",
+      regularHours: 7,
+      overtimeHours: 0,
+      hourlyRate: 82,
+      payrollCost: 574,
+    },
+    {
+      id: "shift-6",
+      day: "Thursday",
+      employeeName: "Paolo Dela Cruz",
+      role: "Grill Cook",
+      shift: "10:00 AM - 7:00 PM",
+      regularHours: 8,
+      overtimeHours: 1,
+      hourlyRate: 115,
+      payrollCost: 1064,
+    },
+    {
+      id: "shift-7",
+      day: "Friday",
+      employeeName: "Sofia Ramos",
+      role: "Shift Lead",
+      shift: "11:00 AM - 10:00 PM",
+      regularHours: 8,
+      overtimeHours: 3,
+      hourlyRate: 130,
+      payrollCost: 1528,
+    },
+    {
+      id: "shift-8",
+      day: "Friday",
+      employeeName: "Ken Bautista",
+      role: "Server",
+      shift: "3:00 PM - 11:00 PM",
+      regularHours: 8,
+      overtimeHours: 0,
+      hourlyRate: 90,
+      payrollCost: 720,
+    },
+    {
+      id: "shift-9",
+      day: "Saturday",
+      employeeName: "Jessa Tan",
+      role: "Cashier",
+      shift: "10:00 AM - 8:00 PM",
+      regularHours: 8,
+      overtimeHours: 2,
+      hourlyRate: 88,
+      payrollCost: 924,
+    },
+    {
+      id: "shift-10",
+      day: "Saturday",
+      employeeName: "Arvin Lee",
+      role: "Line Cook",
+      shift: "12:00 PM - 11:00 PM",
+      regularHours: 8,
+      overtimeHours: 3,
+      hourlyRate: 112,
+      payrollCost: 1316,
+    },
+    {
+      id: "shift-11",
+      day: "Sunday",
+      employeeName: "Ivy Mendoza",
+      role: "Server",
+      shift: "11:00 AM - 6:00 PM",
+      regularHours: 7,
+      overtimeHours: 0,
+      hourlyRate: 88,
+      payrollCost: 616,
+    },
+    {
+      id: "shift-12",
+      day: "Sunday",
+      employeeName: "Ramon Flores",
+      role: "Dishwasher",
+      shift: "12:00 PM - 7:00 PM",
+      regularHours: 7,
+      overtimeHours: 0,
+      hourlyRate: 78,
+      payrollCost: 546,
     },
   ],
   businessProjection: {

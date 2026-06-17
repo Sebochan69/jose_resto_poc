@@ -1,5 +1,9 @@
 import { Users } from "lucide-react";
-import type { PayrollDay, PayrollMetric } from "../data/mockRestaurantData";
+import type {
+  PayrollDay,
+  PayrollMetric,
+  PayrollStaffShift,
+} from "../data/mockRestaurantData";
 import {
   calculatePayrollPercent,
   formatCurrency,
@@ -11,13 +15,23 @@ import { StatusBadge } from "./StatusBadge";
 interface PayrollIntelligenceProps {
   metrics: PayrollMetric;
   payroll: PayrollDay[];
+  staffShifts: PayrollStaffShift[];
 }
 
 export function PayrollIntelligence({
   metrics,
   payroll,
+  staffShifts,
 }: PayrollIntelligenceProps) {
   const weeklySales = payroll.reduce((total, day) => total + day.sales, 0);
+  const totalStaffHours = staffShifts.reduce(
+    (total, shift) => total + shift.regularHours + shift.overtimeHours,
+    0,
+  );
+  const totalOvertimeHours = staffShifts.reduce(
+    (total, shift) => total + shift.overtimeHours,
+    0,
+  );
   const payrollPercent = calculatePayrollPercent(
     metrics.totalPayrollThisWeek,
     weeklySales,
@@ -85,6 +99,56 @@ export function PayrollIntelligence({
                 <td>{day.recommendation}</td>
               </tr>
             ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="subsection-heading">
+        <div>
+          <h3>Staff Hours Breakdown</h3>
+          <p>Who worked, shift length, overtime, and estimated labor cost.</p>
+        </div>
+        <span>
+          {totalStaffHours.toFixed(1)} total hours |{" "}
+          {totalOvertimeHours.toFixed(1)} OT hours
+        </span>
+      </div>
+
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Staff</th>
+              <th>Role</th>
+              <th>Shift</th>
+              <th>Regular Hours</th>
+              <th>OT Hours</th>
+              <th>Total Hours</th>
+              <th>Rate</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            {staffShifts.map((shift) => {
+              const totalHours = shift.regularHours + shift.overtimeHours;
+
+              return (
+                <tr key={shift.id}>
+                  <td>
+                    <strong>{shift.day}</strong>
+                  </td>
+                  <td>{shift.employeeName}</td>
+                  <td>{shift.role}</td>
+                  <td>{shift.shift}</td>
+                  <td>{shift.regularHours.toFixed(1)}</td>
+                  <td>{shift.overtimeHours.toFixed(1)}</td>
+                  <td>{totalHours.toFixed(1)}</td>
+                  <td>{formatCurrency(shift.hourlyRate)}</td>
+                  <td>{formatCurrency(shift.payrollCost)}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

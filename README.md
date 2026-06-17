@@ -179,6 +179,11 @@ Starter files:
 - `backend/README.md`: future FastAPI plan.
 - `.env.example`: frontend API base URL placeholder.
 
+Payroll detail can be returned at two levels:
+
+- `payroll`: daily totals and AI recommendations.
+- `payrollStaffShifts`: staff member, role, shift window, regular hours, overtime hours, hourly rate, and estimated cost.
+
 Later, copy the example file:
 
 ```bash
