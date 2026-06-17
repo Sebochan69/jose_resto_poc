@@ -1,0 +1,73 @@
+{
+  "restaurant": {
+    "name": "JOSE RESTO POC",
+    "location": "Quezon City flagship",
+    "serviceModel": "Casual dining and delivery"
+  },
+  "overview": {
+    "revenueToday": 48250,
+    "revenueThisWeek": 325900,
+    "foodCostPercent": 34.8,
+    "payrollPercent": 28.4,
+    "otherOperatingCostPercent": 12.5
+  },
+  "aiSummary": "Your restaurant is profitable, but profit leakage is coming from payroll inefficiency, underpriced menu items, and inventory risk.",
+  "profitLeaks": [
+    {
+      "id": "leak-1",
+      "source": "Underpriced menu items",
+      "category": "Menu pricing",
+      "estimatedWeeklyLoss": 9200,
+      "severity": "High",
+      "recommendedAction": "Increase Beef Pares and Crispy Chicken pricing by 8% to 12% or reduce portion cost."
+    }
+  ],
+  "inventory": [
+    {
+      "id": "inv-1",
+      "item": "Chicken thigh",
+      "currentStock": 18,
+      "unit": "kg",
+      "dailyUsage": 11,
+      "reorderLevel": 25,
+      "suggestedReorder": 55,
+      "status": "Critical"
+    }
+  ],
+  "menuProfitability": [
+    {
+      "id": "menu-1",
+      "menuItem": "Beef Pares",
+      "sellingPrice": 165,
+      "foodCost": 72,
+      "targetMarginPercent": 62,
+      "salesVolume": 184,
+      "recommendation": "Increase Beef Pares from PHP 165 to PHP 185 or reduce portion cost by 8%."
+    }
+  ],
+  "payrollMetrics": {
+    "totalPayrollThisWeek": 92500,
+    "targetPayrollRange": "22% - 26%",
+    "estimatedPayrollLeakage": 16800,
+    "overstaffedDays": 3
+  },
+  "payroll": [
+    {
+      "id": "pay-1",
+      "day": "Monday",
+      "sales": 42600,
+      "staffCount": 10,
+      "payrollCost": 12400,
+      "status": "High",
+      "recommendation": "Trim one dining room staff slot during 2 PM to 5 PM."
+    }
+  ],
+  "businessProjection": {
+    "projectedNextWeekRevenue": 348500,
+    "projectedNextWeekProfit": 80200,
+    "riskSummary": "Profit should improve if menu price adjustments go live before Friday and chicken stockouts are avoided.",
+    "whatIfScenario": "If chicken and beef costs increase by 10%, weekly profit may drop by PHP 8,000 to PHP 12,000."
+  },
+  "reportTemplates": [],
+  "consultantResponses": {}
+}

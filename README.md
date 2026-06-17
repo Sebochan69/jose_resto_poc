@@ -151,6 +151,52 @@ npm install
 npm run dev
 ```
 
+## Fastest POC Data Flow
+
+For the next POC stage, use local data with manual refresh before connecting Google Sheets.
+
+Recommended flow:
+
+```text
+data/dashboard.json
+  -> FastAPI backend
+  -> React Refresh Data button
+  -> dashboard recalculates KPIs and tables
+```
+
+Why this is faster for a POC:
+
+- No Google Cloud setup yet.
+- No Sheets API credentials yet.
+- No OAuth or service account setup blocking the demo.
+- Easier to edit numbers locally and test dashboard behavior.
+- The frontend API pattern can stay the same when you switch to Google Sheets later.
+
+Starter files:
+
+- `data/dashboard.example.json`: example local data shape.
+- `data/README.md`: local data notes.
+- `backend/README.md`: future FastAPI plan.
+- `.env.example`: frontend API base URL placeholder.
+
+Later, copy the example file:
+
+```bash
+cp data/dashboard.example.json data/dashboard.json
+```
+
+Then edit `data/dashboard.json` with fresh restaurant numbers. When FastAPI is added, the dashboard `Refresh Data` button should call `GET /dashboard` instead of simulating random KPI changes.
+
+Example future refresh function:
+
+```ts
+const refreshData = async () => {
+  const latestData = await getDashboardData();
+  setData(latestData);
+  setLastSynced(new Date());
+};
+```
+
 ## Future Google Sheets Integration
 
 Recommended architecture:
