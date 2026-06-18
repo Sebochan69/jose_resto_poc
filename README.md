@@ -119,6 +119,8 @@ Open the local URL Vite prints in the terminal, usually `http://localhost:5173`.
 
 AI report buttons can call an n8n webhook.
 
+An importable starter workflow is available at `n8n/restopilot-report.workflow.json`.
+
 Create `.env.local`:
 
 ```text

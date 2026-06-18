@@ -1,0 +1,83 @@
+{
+  "name": "Restopilot AI Report Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "restopilot-report",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "d6d3fc57-3680-4d33-a47c-d17afea2318f",
+      "name": "Report Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const requestedReportType = $json.body?.reportType ?? $json.reportType ?? \"overall\";\n\nconst reports = {\n  overall: \"Overall AI Report\\n\\nRevenue is healthy, but profit leakage is concentrated in payroll, stockout risk, and underpriced high-volume items. Prioritize critical inventory replenishment, review slower weekday staffing, and adjust Beef Pares pricing before the weekend rush.\",\n  inventory: \"Inventory Report\\n\\nChicken thigh, garlic, and takeout containers are below reorder thresholds. Place replenishment orders today, confirm supplier lead times, and tighten prep variance on beef and garlic to protect margin.\",\n  menu: \"Menu Pricing Report\\n\\nBeef Pares and Crispy Chicken Rice remain strong sellers, but Beef Pares is below target margin. Raise the price, reduce portion cost, or bundle with a high-margin beverage instead of discounting.\",\n  payroll: \"Payroll Report\\n\\nPayroll is above the target range on slower weekdays. Trim one service slot on Monday and Tuesday afternoons, move prep earlier, and monitor closing overtime after 9:30 PM.\",\n  projection: \"Business Projection Report\\n\\nNext week should improve if current revenue trend holds and leakage controls are applied. Lock supplier pricing for core proteins and rerun the projection after the next data refresh.\"\n};\n\nconst reportType = Object.prototype.hasOwnProperty.call(reports, requestedReportType)\n  ? requestedReportType\n  : \"overall\";\n\nreturn [\n  {\n    json: {\n      success: true,\n      reportType,\n      generatedAt: new Date().toISOString(),\n      report: reports[reportType]\n    }\n  }\n];"
+      },
+      "id": "1f316ccc-a991-4093-8246-f1de8bec2085",
+      "name": "Generate Demo Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "de4336fe-4e43-43a8-84b1-a3d065d3408a",
+      "name": "Return Report",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Report Webhook": {
+      "main": [
+        [
+          {
+            "node": "Generate Demo Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Demo Report": {
+      "main": [
+        [
+          {
+            "node": "Return Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cb551e0d-8a1a-487f-9d04-9e30da2963d8",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}
