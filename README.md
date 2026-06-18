@@ -115,6 +115,43 @@ npm run dev
 
 Open the local URL Vite prints in the terminal, usually `http://localhost:5173`.
 
+## n8n Report Automation
+
+AI report buttons can call an n8n webhook.
+
+Create `.env.local`:
+
+```text
+VITE_N8N_REPORT_WEBHOOK_URL=http://localhost:5678/webhook-test/restopilot-report
+```
+
+Run the dashboard:
+
+```bash
+npm run dev
+```
+
+When a report button is clicked, the dashboard sends:
+
+```json
+{
+  "reportType": "overall"
+}
+```
+
+Expected n8n response:
+
+```json
+{
+  "success": true,
+  "reportType": "overall",
+  "generatedAt": "2026-06-18T00:00:00.000Z",
+  "report": "AI report text here"
+}
+```
+
+If n8n is unavailable, the dashboard falls back to mock report output.
+
 ## Build Check
 
 ```powershell
@@ -153,13 +190,14 @@ npm run dev
 
 ## Fastest POC Data Flow
 
-For the next POC stage, use local data with manual refresh before connecting Google Sheets.
+For the next POC stage, use locally saved CSV files with manual refresh before connecting Google Sheets.
 
 Recommended flow:
 
 ```text
-data/dashboard.json
+data/*.csv
   -> FastAPI backend
+  -> normalized dashboard JSON
   -> React Refresh Data button
   -> dashboard recalculates KPIs and tables
 ```
@@ -169,12 +207,12 @@ Why this is faster for a POC:
 - No Google Cloud setup yet.
 - No Sheets API credentials yet.
 - No OAuth or service account setup blocking the demo.
-- Easier to edit numbers locally and test dashboard behavior.
+- Easier to edit CSV files locally and test dashboard behavior.
 - The frontend API pattern can stay the same when you switch to Google Sheets later.
 
 Starter files:
 
-- `data/dashboard.example.json`: example local data shape.
+- `data/dashboard.example.json`: example normalized JSON shape the frontend expects.
 - `data/README.md`: local data notes.
 - `backend/README.md`: future FastAPI plan.
 - `.env.example`: frontend API base URL placeholder.
@@ -184,13 +222,18 @@ Payroll detail can be returned at two levels:
 - `payroll`: daily totals and AI recommendations.
 - `payrollStaffShifts`: staff member, role, shift window, regular hours, overtime hours, hourly rate, and estimated cost.
 
-Later, copy the example file:
+Later, save exported restaurant data as CSV files in `data/`, for example:
 
-```bash
-cp data/dashboard.example.json data/dashboard.json
+```text
+data/sales.csv
+data/inventory.csv
+data/menu_items.csv
+data/payroll.csv
+data/expenses.csv
+data/settings.csv
 ```
 
-Then edit `data/dashboard.json` with fresh restaurant numbers. When FastAPI is added, the dashboard `Refresh Data` button should call `GET /dashboard` instead of simulating random KPI changes.
+When FastAPI is added, it should read those local CSV files, normalize them into the same dashboard shape documented by `data/dashboard.example.json`, and return that JSON from `GET /dashboard`. The dashboard `Refresh Data` button should call `GET /dashboard` instead of simulating random KPI changes.
 
 Example future refresh function:
 

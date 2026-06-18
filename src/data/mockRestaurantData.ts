@@ -1,3 +1,5 @@
+import type { ReportType } from "../services/reportApi";
+
 export type Severity = "Critical" | "High" | "Medium" | "Low";
 export type InventoryStatus = "Critical" | "Watch" | "Safe";
 export type PayrollStatus = "High" | "Watch" | "On Track";
@@ -77,7 +79,7 @@ export interface BusinessProjection {
 }
 
 export interface AiReportTemplate {
-  id: string;
+  id: ReportType;
   title: string;
   summary: string;
   keyFindings: string[];

@@ -1,0 +1,11 @@
+date,branch,employee_name,role,shift,days_worked,daily_rate,ot_pay,deductions,gross_pay,net_pay
+2026-06-15,Quezon City,Maria Santos,Cashier,9:00 AM - 6:00 PM,1,720,0,40,720,680
+2026-06-15,Quezon City,Jun Reyes,Line Cook,8:00 AM - 5:00 PM,1,820,120,50,940,890
+2026-06-15,Quezon City,Liza Cruz,Server,10:00 AM - 7:00 PM,1,680,0,35,680,645
+2026-06-16,Quezon City,Marco Dela Cruz,Head Cook,8:00 AM - 6:00 PM,1,980,180,60,1160,1100
+2026-06-16,Quezon City,Ana Lopez,Server,11:00 AM - 8:00 PM,1,680,0,35,680,645
+2026-06-16,Quezon City,Ramon Flores,Dishwasher,12:00 PM - 8:00 PM,1,620,0,30,620,590
+2026-06-17,Quezon City,Maria Santos,Cashier,9:00 AM - 6:00 PM,1,720,0,40,720,680
+2026-06-17,Quezon City,Jun Reyes,Line Cook,8:00 AM - 6:00 PM,1,820,150,50,970,920
+2026-06-18,Quezon City,Liza Cruz,Server,10:00 AM - 7:00 PM,1,680,0,35,680,645
+2026-06-18,Quezon City,Marco Dela Cruz,Head Cook,8:00 AM - 5:00 PM,1,980,0,60,980,920

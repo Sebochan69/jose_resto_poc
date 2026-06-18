@@ -221,6 +221,16 @@ td span,
   transform: translateY(-1px);
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+  transform: none;
+}
+
+.button-icon--spin {
+  animation: spin 900ms linear infinite;
+}
+
 .button--primary {
   background: #101418;
   color: #fff;
@@ -663,6 +673,20 @@ tbody tr:hover {
   margin-bottom: 18px;
 }
 
+.report-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 9px 11px;
+  border: 1px solid #f6d9a6;
+  border-radius: 8px;
+  background: #fff9ed;
+  color: #8a570a;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
 .report-panel {
   padding: 20px;
   border: 1px solid #cfd8e3;
@@ -697,6 +721,10 @@ tbody tr:hover {
 .report-panel p {
   max-width: 960px;
   line-height: 1.6;
+}
+
+.report-panel__body {
+  white-space: pre-wrap;
 }
 
 .report-panel__columns {
@@ -797,6 +825,12 @@ tbody tr:hover {
 .chat-input input:focus {
   border-color: rgba(15, 138, 107, 0.72);
   box-shadow: 0 0 0 4px rgba(15, 138, 107, 0.12);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 1180px) {
