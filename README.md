@@ -127,6 +127,12 @@ Create `.env.local`:
 VITE_N8N_REPORT_WEBHOOK_URL=http://localhost:5678/webhook-test/restopilot-report
 ```
 
+If you import and publish the included workflow, use the production webhook URL instead:
+
+```text
+VITE_N8N_REPORT_WEBHOOK_URL=http://localhost:5678/webhook/restopilot-report
+```
+
 Run the dashboard:
 
 ```bash

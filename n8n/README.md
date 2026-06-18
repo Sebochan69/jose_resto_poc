@@ -12,6 +12,12 @@ The workflow exposes a POST webhook at:
 http://localhost:5678/webhook-test/restopilot-report
 ```
 
+When the workflow is published/active, use the production URL:
+
+```text
+http://localhost:5678/webhook/restopilot-report
+```
+
 The dashboard sends:
 
 ```json
