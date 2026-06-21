@@ -1,9 +1,21 @@
 date,branch,expense_type,amount,notes
-2026-06-15,Quezon City,Ingredients,18450,Chicken beef rice and produce restock
-2026-06-15,Quezon City,Packaging,3850,Takeout containers and paper bags
-2026-06-16,Quezon City,Utilities,4200,Electricity partial weekly estimate
-2026-06-16,Quezon City,Delivery Platform Fees,6120,Aggregator commission estimate
-2026-06-17,Quezon City,Maintenance,1800,Freezer temperature sensor repair
-2026-06-17,Quezon City,Marketing,2500,Local lunch bundle boosted post
-2026-06-18,Quezon City,Ingredients,13200,Midweek protein and vegetable top up
-2026-06-18,Quezon City,Cleaning Supplies,1450,Dish soap sanitizer and towels
+2026-06-17,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-17,Main,Utilities,1800,Electricity and water estimate
+2026-06-17,Main,Packaging,1200,Takeout packaging
+2026-06-17,Main,Cleaning Supplies,650,Kitchen and dining cleaning
+2026-06-18,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-18,Main,Utilities,1900,Electricity and water estimate
+2026-06-18,Main,Packaging,1350,Takeout packaging
+2026-06-18,Main,Cleaning Supplies,450,Restock soap and sanitizer
+2026-06-19,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-19,Main,Utilities,2100,Electricity and water estimate
+2026-06-19,Main,Packaging,1500,Takeout packaging
+2026-06-19,Main,Marketing,1200,Weekend promo boost
+2026-06-20,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-20,Main,Utilities,2600,Weekend electricity spike
+2026-06-20,Main,Packaging,1800,High takeout volume
+2026-06-20,Main,Marketing,1500,Saturday promo boost
+2026-06-21,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-21,Main,Utilities,1800,Electricity and water estimate
+2026-06-21,Main,Packaging,1000,Lower takeout volume
+2026-06-21,Main,Cleaning Supplies,500,Closing supplies

@@ -1,12 +1,16 @@
 import { AlertTriangle, FileText, LoaderCircle, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import type { AiReportTemplate } from "../data/mockRestaurantData";
-import { generateAiReport, type ReportType } from "../services/reportApi";
+import { generateAiReport } from "../services/n8nApi";
+import type { ReportType } from "../types";
+import { formatCurrency } from "../utils/calculations";
 import { SectionCard } from "./SectionCard";
 
 interface DisplayReport extends AiReportTemplate {
   generatedAt: Date;
   reportText?: string;
+  healthScore?: number;
+  totalEstimatedLeakage?: number;
 }
 
 interface AiReportsPanelProps {
@@ -14,7 +18,15 @@ interface AiReportsPanelProps {
 }
 
 const fallbackWarning =
-  "Using demo report because the live automation is unavailable.";
+  "Using demo report because live automation is unavailable.";
+
+const reportButtonLabels: Record<ReportType, string> = {
+  overall: "Generate Overall AI Report",
+  inventory: "Generate Inventory Report",
+  menu: "Generate Menu Pricing Report",
+  payroll: "Generate Payroll Report",
+  projection: "Generate Business Projection Report",
+};
 
 export function AiReportsPanel({ reports }: AiReportsPanelProps) {
   const [generatedReport, setGeneratedReport] = useState<DisplayReport>({
@@ -34,7 +46,9 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
       setGeneratedReport({
         ...report,
         generatedAt: new Date(liveReport.generatedAt),
+        healthScore: liveReport.healthScore,
         reportText: liveReport.report,
+        totalEstimatedLeakage: liveReport.totalEstimatedLeakage,
       });
     } catch (error) {
       console.warn(error);
@@ -70,9 +84,7 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
             )}
             {loadingReportType === report.id
               ? "Generating..."
-              : report.id === "overall"
-                ? "Generate Overall AI Report"
-                : `Generate ${report.title}`}
+              : reportButtonLabels[report.id]}
           </button>
         ))}
       </div>
@@ -95,6 +107,24 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
             {generatedReport.generatedAt.toLocaleString()}
           </time>
         </div>
+
+        {typeof generatedReport.healthScore === "number" ||
+        typeof generatedReport.totalEstimatedLeakage === "number" ? (
+          <div className="report-panel__insights" aria-label="Live report metrics">
+            {typeof generatedReport.healthScore === "number" ? (
+              <span>
+                <strong>{generatedReport.healthScore}/100</strong>
+                Health score
+              </span>
+            ) : null}
+            {typeof generatedReport.totalEstimatedLeakage === "number" ? (
+              <span>
+                <strong>{formatCurrency(generatedReport.totalEstimatedLeakage)}</strong>
+                Estimated leakage
+              </span>
+            ) : null}
+          </div>
+        ) : null}
 
         <p className={generatedReport.reportText ? "report-panel__body" : undefined}>
           {generatedReport.reportText ?? generatedReport.summary}

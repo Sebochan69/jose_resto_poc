@@ -2,7 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL?: string;
-  readonly VITE_N8N_REPORT_WEBHOOK_URL?: string;
+  readonly VITE_N8N_EVENTS_WEBHOOK_URL?: string;
 }
 
 interface ImportMeta {

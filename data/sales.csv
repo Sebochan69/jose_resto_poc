@@ -1,13 +1,26 @@
 date,branch,menu_item,quantity_sold,selling_price,revenue
-2026-06-15,Quezon City,Beef Pares,46,165,7590
-2026-06-15,Quezon City,Crispy Chicken Rice,58,145,8410
-2026-06-15,Quezon City,Garlic Beef Bowl,34,175,5950
-2026-06-16,Quezon City,Beef Pares,52,165,8580
-2026-06-16,Quezon City,Crispy Chicken Rice,63,145,9135
-2026-06-16,Quezon City,Mango Float Cup,41,95,3895
-2026-06-17,Quezon City,Beef Pares,49,165,8085
-2026-06-17,Quezon City,Crispy Chicken Rice,66,145,9570
-2026-06-17,Quezon City,Garlic Beef Bowl,38,175,6650
-2026-06-18,Quezon City,Crispy Chicken Rice,44,145,6380
-2026-06-18,Quezon City,Beef Pares,37,165,6105
-2026-06-18,Quezon City,Mango Float Cup,28,95,2660
+2026-06-17,Main,Beef Pares,42,165,6930
+2026-06-17,Main,Chicken Rice Bowl,65,149,9685
+2026-06-17,Main,Iced Tea,80,49,3920
+2026-06-17,Main,Burger Steak,31,139,4309
+2026-06-17,Main,Extra Rice,46,25,1150
+2026-06-18,Main,Beef Pares,46,165,7590
+2026-06-18,Main,Chicken Rice Bowl,72,149,10728
+2026-06-18,Main,Iced Tea,95,49,4655
+2026-06-18,Main,Burger Steak,28,139,3892
+2026-06-18,Main,Extra Rice,58,25,1450
+2026-06-19,Main,Beef Pares,55,165,9075
+2026-06-19,Main,Chicken Rice Bowl,88,149,13112
+2026-06-19,Main,Iced Tea,120,49,5880
+2026-06-19,Main,Burger Steak,40,139,5560
+2026-06-19,Main,Extra Rice,72,25,1800
+2026-06-20,Main,Beef Pares,62,165,10230
+2026-06-20,Main,Chicken Rice Bowl,102,149,15198
+2026-06-20,Main,Iced Tea,155,49,7595
+2026-06-20,Main,Burger Steak,48,139,6672
+2026-06-20,Main,Extra Rice,91,25,2275
+2026-06-21,Main,Beef Pares,35,165,5775
+2026-06-21,Main,Chicken Rice Bowl,54,149,8046
+2026-06-21,Main,Iced Tea,70,49,3430
+2026-06-21,Main,Burger Steak,25,139,3475
+2026-06-21,Main,Extra Rice,40,25,1000

@@ -1,4 +1,4 @@
-import type { ReportType } from "../services/reportApi";
+import type { ReportType } from "../types";
 
 export type Severity = "Critical" | "High" | "Medium" | "Low";
 export type InventoryStatus = "Critical" | "Watch" | "Safe";

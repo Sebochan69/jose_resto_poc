@@ -14,6 +14,7 @@ import { AiConsultant } from "./components/AiConsultant";
 import { AiReportsPanel } from "./components/AiReportsPanel";
 import { BusinessProjection } from "./components/BusinessProjection";
 import { ExecutiveSummary } from "./components/ExecutiveSummary";
+import { ForecastScenarioSimulator } from "./components/ForecastScenarioSimulator";
 import { InventoryRiskTable } from "./components/InventoryRiskTable";
 import { KpiCard } from "./components/KpiCard";
 import { MenuProfitabilityTable } from "./components/MenuProfitabilityTable";
@@ -24,6 +25,9 @@ import {
   mockRestaurantData,
   type RestaurantData,
 } from "./data/mockRestaurantData";
+import { refreshDashboardFromAutomation } from "./services/n8nApi";
+import type { ForecastData } from "./types";
+import { applyAutomationRefresh } from "./utils/automationRefresh";
 import {
   calculateEstimatedProfit,
   calculateHealthScore,
@@ -40,11 +44,24 @@ function App() {
     cloneData(mockRestaurantData),
   );
   const [lastSynced, setLastSynced] = useState(() => new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshWarning, setRefreshWarning] = useState<string | null>(null);
+  const [automationForecast, setAutomationForecast] = useState<
+    ForecastData | undefined
+  >();
+  const [automationHealthScore, setAutomationHealthScore] = useState<
+    number | undefined
+  >();
+  const [automationTotalLeakage, setAutomationTotalLeakage] = useState<
+    number | undefined
+  >();
 
-  const totalLeakage = useMemo(
+  const derivedTotalLeakage = useMemo(
     () => calculateTotalLeakage(data.profitLeaks),
     [data.profitLeaks],
   );
+
+  const totalLeakage = automationTotalLeakage ?? derivedTotalLeakage;
 
   const inventoryRiskCount = useMemo(
     () => data.inventory.filter((item) => item.status !== "Safe").length,
@@ -62,17 +79,19 @@ function App() {
     [data.overview],
   );
 
-  const healthScore = useMemo(
+  const derivedHealthScore = useMemo(
     () =>
       calculateHealthScore({
         foodCostPercent: data.overview.foodCostPercent,
         payrollPercent: data.overview.payrollPercent,
         inventoryRiskCount,
-        totalLeakage,
+        totalLeakage: derivedTotalLeakage,
         revenueThisWeek: data.overview.revenueThisWeek,
       }),
-    [data.overview, inventoryRiskCount, totalLeakage],
+    [data.overview, inventoryRiskCount, derivedTotalLeakage],
   );
+
+  const healthScore = automationHealthScore ?? derivedHealthScore;
 
   const kpis = [
     {
@@ -85,7 +104,7 @@ function App() {
     {
       label: "Revenue Today",
       value: formatCurrency(data.overview.revenueToday),
-      helper: "Live mock sales snapshot",
+      helper: "Latest automation snapshot",
       tone: "blue",
       icon: CircleDollarSign,
     },
@@ -127,36 +146,36 @@ function App() {
     {
       label: "Estimated Profit Leakage",
       value: formatCurrency(totalLeakage),
-      helper: "Mock weekly loss estimate",
+      helper: "Latest leakage intelligence",
       tone: "coral",
       icon: TrendingUp,
     },
   ] as const;
 
-  const refreshData = () => {
-    setData((currentData) => {
-      const nextData = cloneData(currentData);
-      const revenuePulse = 1 + (Math.random() * 0.04 - 0.012);
-      const weeklyPulse = 1 + (Math.random() * 0.025 - 0.008);
+  const refreshData = async () => {
+    setIsRefreshing(true);
 
-      nextData.overview.revenueToday = Math.round(
-        nextData.overview.revenueToday * revenuePulse,
-      );
-      nextData.overview.revenueThisWeek = Math.round(
-        nextData.overview.revenueThisWeek * weeklyPulse,
-      );
-      nextData.overview.foodCostPercent = Number(
-        (nextData.overview.foodCostPercent + (Math.random() - 0.45) * 0.4).toFixed(
-          1,
-        ),
-      );
-      nextData.overview.payrollPercent = Number(
-        (nextData.overview.payrollPercent + (Math.random() - 0.5) * 0.3).toFixed(1),
-      );
+    try {
+      const automationRefresh = await refreshDashboardFromAutomation();
+      const appliedRefresh = applyAutomationRefresh(data, automationRefresh);
 
-      return nextData;
-    });
-    setLastSynced(new Date());
+      setData(appliedRefresh.data);
+      setAutomationForecast(appliedRefresh.forecast);
+      setAutomationHealthScore(appliedRefresh.healthScore);
+      setAutomationTotalLeakage(appliedRefresh.totalEstimatedLeakage);
+      setLastSynced(appliedRefresh.generatedAt ?? new Date());
+      setRefreshWarning(null);
+    } catch (error) {
+      console.warn(error);
+      setData(cloneData(mockRestaurantData));
+      setAutomationForecast(undefined);
+      setAutomationHealthScore(undefined);
+      setAutomationTotalLeakage(undefined);
+      setLastSynced(new Date());
+      setRefreshWarning("Using demo data because live automation is unavailable.");
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   return (
@@ -173,12 +192,28 @@ function App() {
 
           <div className="sync-cluster">
             <span>Last synced: {lastSynced.toLocaleString()}</span>
-            <button className="button button--primary" onClick={refreshData} type="button">
-              <RefreshCw aria-hidden="true" size={18} />
-              Refresh Data
+            <button
+              className="button button--primary"
+              disabled={isRefreshing}
+              onClick={() => void refreshData()}
+              type="button"
+            >
+              <RefreshCw
+                aria-hidden="true"
+                className={isRefreshing ? "button-icon--spin" : undefined}
+                size={18}
+              />
+              {isRefreshing ? "Refreshing..." : "Refresh Data"}
             </button>
           </div>
         </header>
+
+        {refreshWarning ? (
+          <div className="report-warning refresh-warning" role="status">
+            <AlertTriangle aria-hidden="true" size={16} />
+            {refreshWarning}
+          </div>
+        ) : null}
 
         <ExecutiveSummary
           data={data}
@@ -201,6 +236,7 @@ function App() {
         </section>
 
         <ProfitLeakDetector leaks={data.profitLeaks} />
+        <ForecastScenarioSimulator forecast={automationForecast} />
         <InventoryRiskTable items={data.inventory} />
         <MenuProfitabilityTable items={data.menuProfitability} />
         <PayrollIntelligence

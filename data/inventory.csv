@@ -1,9 +1,11 @@
 item,category,current_stock,unit,daily_usage,reorder_level,cost_per_unit,supplier
-Chicken thigh,Protein,18,kg,11,25,118,North Fresh Poultry
-Beef brisket,Protein,26,kg,8,24,245,Prime Cuts Manila
-Rice,Staple,90,kg,18,45,52,Golden Grain Supply
-Garlic,Produce,4,kg,2.5,8,135,QC Produce Depot
-Cooking oil,Dry Goods,24,L,5,20,96,Kitchen Essentials PH
-Takeout containers,Packaging,220,pcs,96,300,4.5,PackPro Supplies
-Eggs,Protein,180,pcs,48,120,7.8,North Fresh Poultry
-Iced tea concentrate,Beverage,16,L,4,10,88,Metro Beverage Co
+Chicken,Meat,18,kg,7,20,180,ABC Poultry Supply
+Beef,Meat,12,kg,5,15,320,Prime Meat Trading
+Cooking Oil,Kitchen Supply,9,L,3,10,145,Golden Fry Distributor
+Rice,Dry Goods,45,kg,12,25,58,Bigas Center PH
+Iced Tea Powder,Beverage,8,pack,1.5,5,220,Beverage Hub
+Burger Patty,Meat,28,pcs,10,20,38,Frozen Goods Supplier
+Eggs,Dairy,90,pcs,25,60,8,Local Egg Farm
+Soy Sauce,Condiments,6,L,1,5,75,KitchenMart
+Takeout Box,Packaging,85,pcs,35,100,6,PackPro PH
+Garlic,Produce,4,kg,1.2,5,110,Wet Market Supplier

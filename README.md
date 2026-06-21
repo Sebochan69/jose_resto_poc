@@ -10,7 +10,7 @@ What is dynamic now:
 
 - KPI cards, tables, report panels, and chat responses render from centralized mock data.
 - Calculations such as margin %, payroll %, days left, estimated profit, health score, and total leakage are reusable.
-- `Refresh Data` updates the last synced timestamp and slightly changes mock KPI values.
+- `Refresh Data` calls the n8n `refresh_dashboard` event and keeps values stable unless live automation returns updated metrics.
 - AI report buttons and the consultant chat use mock generated responses.
 
 What is not live yet:
@@ -115,22 +115,14 @@ npm run dev
 
 Open the local URL Vite prints in the terminal, usually `http://localhost:5173`.
 
-## n8n Report Automation
+## n8n Event Webhook Integration
 
-AI report buttons can call an n8n webhook.
-
-An importable starter workflow is available at `n8n/restopilot-report.workflow.json`.
+The React dashboard sends event-based payloads to one n8n webhook. AI report generation, OpenAI calls, routing, and automation logic should happen inside n8n, not in React.
 
 Create `.env.local`:
 
 ```text
-VITE_N8N_REPORT_WEBHOOK_URL=http://localhost:5678/webhook-test/restopilot-report
-```
-
-If you import and publish the included workflow, use the production webhook URL instead:
-
-```text
-VITE_N8N_REPORT_WEBHOOK_URL=http://localhost:5678/webhook/restopilot-report
+VITE_N8N_EVENTS_WEBHOOK_URL=http://localhost:5678/webhook-test/restopilot-events
 ```
 
 Run the dashboard:
@@ -139,26 +131,59 @@ Run the dashboard:
 npm run dev
 ```
 
-When a report button is clicked, the dashboard sends:
+Supported dashboard events:
+
+- `generate_report`: called by AI report buttons.
+- `ask_ai`: called by the Ask AI Consultant chat.
+- `refresh_dashboard`: called by the dashboard refresh action.
+
+Example report event:
 
 ```json
 {
-  "reportType": "overall"
+  "event": "generate_report",
+  "reportType": "overall",
+  "source": "dashboard"
 }
 ```
 
-Expected n8n response:
+Example Ask AI event:
+
+```json
+{
+  "event": "ask_ai",
+  "question": "Why did profit drop this week?",
+  "source": "dashboard"
+}
+```
+
+Example refresh event:
+
+```json
+{
+  "event": "refresh_dashboard",
+  "source": "dashboard"
+}
+```
+
+Expected report response:
 
 ```json
 {
   "success": true,
+  "event": "generate_report",
   "reportType": "overall",
   "generatedAt": "2026-06-18T00:00:00.000Z",
-  "report": "AI report text here"
+  "healthScore": 78,
+  "totalEstimatedLeakage": 18600,
+  "report": "AI report text here",
+  "metrics": {},
+  "intelligence": {},
+  "forecast": {}
 }
 ```
 
-If n8n is unavailable, the dashboard falls back to mock report output.
+If n8n is unavailable, the frontend keeps using mock fallback data so demos remain resilient.
 
 ## Build Check
 

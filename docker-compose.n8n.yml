@@ -9,9 +9,11 @@ services:
       GENERIC_TIMEZONE: Asia/Manila
       TZ: Asia/Manila
       N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      NODE_FUNCTION_ALLOW_BUILTIN: fs,path
     volumes:
       - n8n_data:/home/node/.n8n
       - ./n8n:/home/node/workflows:ro
+      - ./data:/home/node/data:ro
 
 volumes:
   n8n_data:

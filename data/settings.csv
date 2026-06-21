@@ -1,9 +1,9 @@
 metric,value
-target_food_cost_percent,32
-target_payroll_min_percent,22
-target_payroll_max_percent,26
-target_menu_margin_percent,62
-critical_inventory_days_left,2
-watch_inventory_days_left,4
+target_food_cost_pct,35
+target_payroll_pct,22
+target_menu_margin_pct,40
+critical_stock_days,3
+watch_stock_days,5
+target_health_score,80
+default_branch,Main
 currency,PHP
-primary_branch,Quezon City

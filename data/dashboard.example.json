@@ -1,97 +1,199 @@
 {
-  "restaurant": {
-    "name": "JOSE RESTO POC",
-    "location": "Quezon City flagship",
-    "serviceModel": "Casual dining and delivery"
+  "generatedAt": "2026-06-18T08:00:00.000Z",
+  "branch": "Main",
+  "currency": "PHP",
+  "kpis": {
+    "healthScore": 74,
+    "revenueToday": 41421,
+    "revenueThisWeek": 158828,
+    "estimatedFoodCost": 66541,
+    "foodCostPct": 41.9,
+    "grossPayroll": 18970,
+    "netPayroll": 17320,
+    "overtimeCost": 1910,
+    "payrollPct": 10.9,
+    "totalExpenses": 43300,
+    "estimatedProfit": 31667,
+    "estimatedProfitLeakage": 18600,
+    "inventoryRiskCount": 4,
+    "underpricedItemCount": 2,
+    "overstaffedDayCount": 1
   },
-  "overview": {
-    "revenueToday": 48250,
-    "revenueThisWeek": 325900,
-    "foodCostPercent": 34.8,
-    "payrollPercent": 28.4,
-    "otherOperatingCostPercent": 12.5
-  },
-  "aiSummary": "Your restaurant is profitable, but profit leakage is coming from payroll inefficiency, underpriced menu items, and inventory risk.",
+  "aiSummary": "The restaurant is profitable, but margin leakage is coming from underpriced menu items, critical inventory items, and selected payroll overtime risks.",
   "profitLeaks": [
     {
-      "id": "leak-1",
       "source": "Underpriced menu items",
-      "category": "Menu pricing",
-      "estimatedWeeklyLoss": 9200,
+      "estimatedWeeklyLoss": 5700,
       "severity": "High",
-      "recommendedAction": "Increase Beef Pares and Crispy Chicken pricing by 8% to 12% or reduce portion cost."
+      "recommendedAction": "Review Beef Pares and Burger Steak pricing or reduce portion cost."
+    },
+    {
+      "source": "Critical inventory risk",
+      "estimatedWeeklyLoss": 4800,
+      "severity": "High",
+      "recommendedAction": "Reorder chicken, beef, and cooking oil before stockout."
+    },
+    {
+      "source": "Overtime leakage",
+      "estimatedWeeklyLoss": 1900,
+      "severity": "Medium",
+      "recommendedAction": "Review closing shift overtime and redistribute staff to peak hours."
     }
   ],
-  "inventory": [
+  "inventoryRisks": [
     {
-      "id": "inv-1",
-      "item": "Chicken thigh",
+      "item": "Chicken",
+      "category": "Meat",
       "currentStock": 18,
       "unit": "kg",
-      "dailyUsage": 11,
-      "reorderLevel": 25,
-      "suggestedReorder": 55,
-      "status": "Critical"
+      "dailyUsage": 7,
+      "daysLeft": 2.57,
+      "reorderLevel": 20,
+      "suggestedReorder": 31,
+      "status": "Critical",
+      "supplier": "ABC Poultry Supply"
+    },
+    {
+      "item": "Beef",
+      "category": "Meat",
+      "currentStock": 12,
+      "unit": "kg",
+      "dailyUsage": 5,
+      "daysLeft": 2.4,
+      "reorderLevel": 15,
+      "suggestedReorder": 23,
+      "status": "Critical",
+      "supplier": "Prime Meat Trading"
+    },
+    {
+      "item": "Cooking Oil",
+      "category": "Kitchen Supply",
+      "currentStock": 9,
+      "unit": "L",
+      "dailyUsage": 3,
+      "daysLeft": 3,
+      "reorderLevel": 10,
+      "suggestedReorder": 12,
+      "status": "Critical",
+      "supplier": "Golden Fry Distributor"
     }
   ],
   "menuProfitability": [
     {
-      "id": "menu-1",
       "menuItem": "Beef Pares",
+      "category": "Rice Meal",
       "sellingPrice": 165,
-      "foodCost": 72,
-      "targetMarginPercent": 62,
-      "salesVolume": 184,
-      "recommendation": "Increase Beef Pares from PHP 165 to PHP 185 or reduce portion cost by 8%."
-    }
-  ],
-  "payrollMetrics": {
-    "totalPayrollThisWeek": 92500,
-    "targetPayrollRange": "22% - 26%",
-    "estimatedPayrollLeakage": 16800,
-    "overstaffedDays": 3
-  },
-  "payroll": [
-    {
-      "id": "pay-1",
-      "day": "Monday",
-      "sales": 42600,
-      "staffCount": 10,
-      "payrollCost": 12400,
-      "status": "High",
-      "recommendation": "Trim one dining room staff slot during 2 PM to 5 PM."
-    }
-  ],
-  "payrollStaffShifts": [
-    {
-      "id": "shift-1",
-      "day": "Monday",
-      "employeeName": "Ana Cruz",
-      "role": "Cashier",
-      "shift": "10:00 AM - 6:00 PM",
-      "regularHours": 8,
-      "overtimeHours": 0,
-      "hourlyRate": 85,
-      "payrollCost": 680
+      "foodCost": 112,
+      "targetMargin": 40,
+      "currentMargin": 32.12,
+      "salesVolume": 240,
+      "status": "Underpriced",
+      "recommendation": "Consider increasing price to around PHP 187 or reducing portion cost."
     },
     {
-      "id": "shift-2",
-      "day": "Monday",
-      "employeeName": "Marco Santos",
-      "role": "Line Cook",
-      "shift": "9:00 AM - 7:00 PM",
-      "regularHours": 8,
-      "overtimeHours": 2,
-      "hourlyRate": 110,
-      "payrollCost": 1155
+      "menuItem": "Chicken Rice Bowl",
+      "category": "Rice Meal",
+      "sellingPrice": 149,
+      "foodCost": 82,
+      "targetMargin": 40,
+      "currentMargin": 44.97,
+      "salesVolume": 381,
+      "status": "Healthy",
+      "recommendation": "Maintain current pricing."
+    },
+    {
+      "menuItem": "Iced Tea",
+      "category": "Beverage",
+      "sellingPrice": 49,
+      "foodCost": 11,
+      "targetMargin": 65,
+      "currentMargin": 77.55,
+      "salesVolume": 520,
+      "status": "High Margin",
+      "recommendation": "Promote as combo add-on."
     }
   ],
-  "businessProjection": {
-    "projectedNextWeekRevenue": 348500,
-    "projectedNextWeekProfit": 80200,
-    "riskSummary": "Profit should improve if menu price adjustments go live before Friday and chicken stockouts are avoided.",
-    "whatIfScenario": "If chicken and beef costs increase by 10%, weekly profit may drop by PHP 8,000 to PHP 12,000."
+  "payroll": {
+    "summary": {
+      "grossPayroll": 18970,
+      "netPayroll": 17320,
+      "overtimeCost": 1910,
+      "deductions": 1650,
+      "payrollPctOfSales": 10.9,
+      "estimatedPayrollLeakage": 1900
+    },
+    "daily": [
+      {
+        "date": "2026-06-17",
+        "sales": 25994,
+        "staffCount": 5,
+        "payrollCost": 3220,
+        "payrollPctOfSales": 12.38,
+        "status": "Good",
+        "recommendation": "Staffing looks aligned with sales."
+      },
+      {
+        "date": "2026-06-20",
+        "sales": 41970,
+        "staffCount": 5,
+        "payrollCost": 3740,
+        "payrollPctOfSales": 8.91,
+        "status": "Good",
+        "recommendation": "Weekend staffing looks efficient relative to sales volume."
+      }
+    ],
+    "staffShifts": [
+      {
+        "date": "2026-06-20",
+        "employeeName": "Mark Santos",
+        "role": "Cook",
+        "shift": "Closing",
+        "daysWorked": 1,
+        "dailyRate": 850,
+        "otPay": 250,
+        "deductions": 100,
+        "grossPay": 1100,
+        "netPay": 1000,
+        "status": "Overtime Watch"
+      },
+      {
+        "date": "2026-06-20",
+        "employeeName": "Grace Lim",
+        "role": "Server",
+        "shift": "Dinner",
+        "daysWorked": 1,
+        "dailyRate": 650,
+        "otPay": 150,
+        "deductions": 50,
+        "grossPay": 800,
+        "netPay": 750,
+        "status": "Normal"
+      }
+    ]
   },
-  "reportTemplates": [],
-  "consultantResponses": {}
+  "businessProjection": {
+    "projectedNextWeekRevenue": 172000,
+    "projectedNextWeekProfit": 42000,
+    "riskSummary": "Food cost is rising faster than sales on beef-heavy menu items.",
+    "whatIfScenario": "If beef and chicken cost increase by 10%, weekly profit may drop by PHP 8000 to PHP 12000.",
+    "recommendedAction": "Promote high-margin beverages and review Beef Pares pricing."
+  },
+  "reports": {
+    "supportedReportTypes": [
+      "overall",
+      "inventory",
+      "menu",
+      "payroll",
+      "projection"
+    ],
+    "expectedWebhookPayload": {
+      "reportType": "overall"
+    },
+    "expectedWebhookResponse": {
+      "success": true,
+      "reportType": "overall",
+      "generatedAt": "2026-06-18T00:00:00.000Z",
+      "report": "AI report text here"
+    }
+  }
 }

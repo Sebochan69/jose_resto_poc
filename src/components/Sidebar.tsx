@@ -6,6 +6,7 @@ import {
   Gauge,
   LayoutDashboard,
   Package,
+  TrendingUp,
   Utensils,
   Users,
 } from "lucide-react";
@@ -13,6 +14,7 @@ import {
 const navItems = [
   { href: "#overview", label: "Overview", icon: LayoutDashboard },
   { href: "#profit-leaks", label: "Profit Leaks", icon: AlertTriangle },
+  { href: "#forecast-simulator", label: "Forecast", icon: TrendingUp },
   { href: "#inventory", label: "Inventory", icon: Package },
   { href: "#menu-pricing", label: "Menu Pricing", icon: Utensils },
   { href: "#payroll", label: "Payroll", icon: Users },
