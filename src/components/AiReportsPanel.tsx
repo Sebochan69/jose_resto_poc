@@ -25,6 +25,8 @@ interface DisplayReport extends AiReportTemplate {
 
 interface AiReportsPanelProps {
   reports: AiReportTemplate[];
+  dashboardHealthScore?: number;
+  dashboardTotalLeakage?: number;
 }
 
 const fallbackWarning =
@@ -50,7 +52,11 @@ const getSelectedDeliveryChannels = (
     .filter(([, isEnabled]) => isEnabled)
     .map(([channel]) => channel);
 
-export function AiReportsPanel({ reports }: AiReportsPanelProps) {
+export function AiReportsPanel({
+  dashboardHealthScore,
+  dashboardTotalLeakage,
+  reports,
+}: AiReportsPanelProps) {
   const [generatedReport, setGeneratedReport] = useState<DisplayReport>({
     ...reports[0],
     generatedAt: new Date(),
@@ -68,6 +74,10 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
     tone: "success" | "error";
     message: string;
   } | null>(null);
+  const displayedHealthScore =
+    generatedReport.healthScore ?? dashboardHealthScore;
+  const displayedTotalLeakage =
+    generatedReport.totalEstimatedLeakage ?? dashboardTotalLeakage;
 
   const toggleDeliveryChannel = (channel: DeliveryChannel) => {
     setDeliveryChannels((currentChannels) => ({
@@ -244,18 +254,18 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
           </time>
         </div>
 
-        {typeof generatedReport.healthScore === "number" ||
-        typeof generatedReport.totalEstimatedLeakage === "number" ? (
+        {typeof displayedHealthScore === "number" ||
+        typeof displayedTotalLeakage === "number" ? (
           <div className="report-panel__insights" aria-label="Live report metrics">
-            {typeof generatedReport.healthScore === "number" ? (
+            {typeof displayedHealthScore === "number" ? (
               <span>
-                <strong>{generatedReport.healthScore}/100</strong>
+                <strong>{displayedHealthScore}/100</strong>
                 Health score
               </span>
             ) : null}
-            {typeof generatedReport.totalEstimatedLeakage === "number" ? (
+            {typeof displayedTotalLeakage === "number" ? (
               <span>
-                <strong>{formatCurrency(generatedReport.totalEstimatedLeakage)}</strong>
+                <strong>{formatCurrency(displayedTotalLeakage)}</strong>
                 Estimated leakage
               </span>
             ) : null}

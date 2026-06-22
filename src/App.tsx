@@ -2,17 +2,23 @@ import {
   Activity,
   AlertTriangle,
   Banknote,
-  CalendarRange,
+  Clock3,
   CircleDollarSign,
   ClipboardList,
+  Moon,
+  PackageCheck,
   Percent,
   RefreshCw,
+  ShieldAlert,
   Sparkles,
+  Sun,
   TrendingUp,
+  Truck,
   Utensils,
+  Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { AiActionBox } from "./components/AiActionBox";
 import { AiConsultant } from "./components/AiConsultant";
 import { AiReportsPanel } from "./components/AiReportsPanel";
@@ -40,6 +46,7 @@ import type {
 } from "./types";
 import { applyAutomationRefresh } from "./utils/automationRefresh";
 import {
+  calculateDaysLeft,
   calculateEstimatedProfit,
   calculateHealthScore,
   calculateMarginPercent,
@@ -51,18 +58,134 @@ import {
 const cloneData = (data: RestaurantData): RestaurantData =>
   JSON.parse(JSON.stringify(data)) as RestaurantData;
 
-const defaultOverviewCardIds = [
-  "total-revenue",
-  "estimated-profit",
-  "profit-margin",
-  "food-cost-percent",
-  "payroll-percent",
-  "health-score",
-  "estimated-leakage",
-  "critical-inventory",
-  "underpriced-menu",
-  "forecast-revenue",
-];
+type Theme = "light" | "dark";
+
+const getInitialTheme = (): Theme => {
+  const savedTheme = window.localStorage.getItem("restopilot-theme");
+  const initialTheme =
+    savedTheme === "light" || savedTheme === "dark"
+      ? savedTheme
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+
+  document.documentElement.dataset.theme = initialTheme;
+  return initialTheme;
+};
+
+type OverviewLayoutPreset =
+  | "Owner Summary"
+  | "Profit Leaks"
+  | "Inventory Risk"
+  | "Forecast View"
+  | "Payroll View"
+  | "Menu Pricing";
+
+const overviewLayoutPresets: Record<OverviewLayoutPreset, string[]> = {
+  "Owner Summary": [
+    "revenue",
+    "estimated-profit",
+    "profit-margin",
+    "health-score",
+    "estimated-leakage",
+    "food-cost-percent",
+    "payroll-percent",
+    "forecast-revenue",
+  ],
+  "Profit Leaks": [
+    "estimated-leakage",
+    "biggest-leak",
+    "food-cost-percent",
+    "menu-pricing-leakage",
+    "inventory-risk-count",
+    "payroll-percent",
+    "recommended-action",
+  ],
+  "Inventory Risk": [
+    "critical-items",
+    "watch-items",
+    "safe-items",
+    "top-reorder-priority",
+    "lowest-days-left",
+    "stockout-impact",
+    "supplier-count",
+  ],
+  "Forecast View": [
+    "forecast-revenue",
+    "forecast-profit",
+    "forecast-confidence",
+    "forecast-trend",
+    "best-scenario",
+    "worst-scenario",
+    "forecast-main-risk",
+  ],
+  "Payroll View": [
+    "gross-payroll",
+    "net-payroll",
+    "overtime-cost",
+    "payroll-percent",
+    "staff-count",
+    "payroll-status",
+  ],
+  "Menu Pricing": [
+    "underpriced-items",
+    "average-margin",
+    "food-cost-percent",
+    "menu-pricing-leakage",
+    "top-underpriced-item",
+    "recommended-price-action",
+  ],
+};
+
+const overviewLayoutOptions = Object.keys(
+  overviewLayoutPresets,
+) as OverviewLayoutPreset[];
+
+const detectOverviewLayout = (request: string): OverviewLayoutPreset => {
+  const normalizedRequest = request.toLowerCase();
+
+  if (
+    ["inventory", "stock", "reorder", "supplier"].some((keyword) =>
+      normalizedRequest.includes(keyword),
+    )
+  ) {
+    return "Inventory Risk";
+  }
+
+  if (
+    ["leak", "loss", "profit leak", "waste", "margin issue"].some(
+      (keyword) => normalizedRequest.includes(keyword),
+    )
+  ) {
+    return "Profit Leaks";
+  }
+
+  if (
+    ["forecast", "projection", "next week", "next 7 days"].some((keyword) =>
+      normalizedRequest.includes(keyword),
+    )
+  ) {
+    return "Forecast View";
+  }
+
+  if (
+    ["payroll", "staff", "overtime", "labor"].some((keyword) =>
+      normalizedRequest.includes(keyword),
+    )
+  ) {
+    return "Payroll View";
+  }
+
+  if (
+    ["menu", "pricing", "price", "food cost", "margin"].some((keyword) =>
+      normalizedRequest.includes(keyword),
+    )
+  ) {
+    return "Menu Pricing";
+  }
+
+  return "Owner Summary";
+};
 
 const pageMeta: Record<DashboardPage, { eyebrow: string; title: string; description: string }> = {
   overview: {
@@ -111,7 +234,15 @@ interface OverviewCardDefinition {
   icon: LucideIcon;
 }
 
-const unique = (values: string[]) => Array.from(new Set(values));
+interface DashboardState {
+  data: RestaurantData;
+  forecast?: ForecastData;
+  healthScore?: number;
+  totalEstimatedLeakage?: number;
+  generatedAt: Date;
+  dataSourceMode: DataSourceMode;
+  latestAutomationPayload?: AutomationDashboardPayload;
+}
 
 const pageReportTypes: Partial<Record<DashboardPage, ReportType>> = {
   overview: "overall",
@@ -124,28 +255,35 @@ const pageReportTypes: Partial<Record<DashboardPage, ReportType>> = {
 
 function App() {
   const [activePage, setActivePage] = useState<DashboardPage>("overview");
-  const [data, setData] = useState<RestaurantData>(() =>
-    cloneData(mockRestaurantData),
-  );
-  const [lastSynced, setLastSynced] = useState(() => new Date());
-  const [dataSourceMode, setDataSourceMode] =
-    useState<DataSourceMode>("CSV sample data");
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [dashboard, setDashboard] = useState<DashboardState>(() => ({
+    data: cloneData(mockRestaurantData),
+    generatedAt: new Date(),
+    dataSourceMode: "CSV sample data",
+  }));
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshWarning, setRefreshWarning] = useState<string | null>(null);
-  const [automationForecast, setAutomationForecast] = useState<
-    ForecastData | undefined
-  >();
-  const [automationHealthScore, setAutomationHealthScore] = useState<
-    number | undefined
-  >();
-  const [automationTotalLeakage, setAutomationTotalLeakage] = useState<
-    number | undefined
-  >();
+  const [activeOverviewLayout, setActiveOverviewLayout] =
+    useState<OverviewLayoutPreset>("Owner Summary");
   const [overviewCardIds, setOverviewCardIds] = useState<string[]>(
-    defaultOverviewCardIds,
+    overviewLayoutPresets["Owner Summary"],
   );
   const [overviewIntent, setOverviewIntent] = useState("");
   const [overviewLayoutNote, setOverviewLayoutNote] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem("restopilot-theme", theme);
+  }, [theme]);
+
+  const {
+    data,
+    dataSourceMode,
+    forecast: automationForecast,
+    generatedAt: lastSynced,
+    healthScore: automationHealthScore,
+    totalEstimatedLeakage: automationTotalLeakage,
+  } = dashboard;
 
   const derivedTotalLeakage = useMemo(
     () => calculateTotalLeakage(data.profitLeaks),
@@ -154,25 +292,81 @@ function App() {
 
   const totalLeakage = automationTotalLeakage ?? derivedTotalLeakage;
 
-  const criticalInventoryCount = useMemo(
-    () => data.inventory.filter((item) => item.status === "Critical").length,
-    [data.inventory],
-  );
+  const criticalInventoryCount =
+    data.inventorySummary?.criticalCount ??
+    data.inventory.filter((item) => item.status === "Critical").length;
+  const watchInventoryCount =
+    data.inventorySummary?.watchCount ??
+    data.inventory.filter((item) => item.status === "Watch").length;
+  const safeInventoryCount =
+    data.inventorySummary?.safeCount ??
+    data.inventory.filter((item) => item.status === "Safe").length;
+  const inventoryRiskCount = criticalInventoryCount + watchInventoryCount;
+  const inventoryByPriority = [...data.inventory].sort((a, b) => {
+    const statusRank = { Critical: 0, Watch: 1, Safe: 2 };
+    const statusDifference = statusRank[a.status] - statusRank[b.status];
 
-  const inventoryRiskCount = useMemo(
-    () => data.inventory.filter((item) => item.status !== "Safe").length,
-    [data.inventory],
-  );
+    if (statusDifference !== 0) {
+      return statusDifference;
+    }
 
-  const underpricedMenuItems = useMemo(
-    () =>
-      data.menuProfitability.filter(
-        (item) =>
-          calculateMarginPercent(item.sellingPrice, item.foodCost) <
-          item.targetMarginPercent,
-      ).length,
-    [data.menuProfitability],
+    return (
+      calculateDaysLeft(a.currentStock, a.dailyUsage) -
+      calculateDaysLeft(b.currentStock, b.dailyUsage)
+    );
+  });
+  const topReorderPriority = inventoryByPriority.find(
+    (item) => item.status !== "Safe",
   );
+  const lowestCoverageItem = [...data.inventory]
+    .filter((item) => item.dailyUsage > 0)
+    .sort(
+      (a, b) =>
+        calculateDaysLeft(a.currentStock, a.dailyUsage) -
+        calculateDaysLeft(b.currentStock, b.dailyUsage),
+    )[0];
+  const supplierCount = new Set(
+    data.inventory
+      .map((item) => item.supplier)
+      .filter((supplier): supplier is string => Boolean(supplier)),
+  ).size;
+
+  const menuItemsWithMargin = data.menuProfitability.map((item) => ({
+    ...item,
+    margin: calculateMarginPercent(item.sellingPrice, item.foodCost),
+  }));
+  const underpricedItems = menuItemsWithMargin.filter(
+    (item) => item.margin < item.targetMarginPercent,
+  );
+  const underpricedMenuItems = underpricedItems.length;
+  const averageMenuMargin = menuItemsWithMargin.length
+    ? menuItemsWithMargin.reduce((total, item) => total + item.margin, 0) /
+      menuItemsWithMargin.length
+    : 0;
+  const topUnderpricedItem = [...underpricedItems].sort(
+    (a, b) =>
+      b.targetMarginPercent - b.margin - (a.targetMarginPercent - a.margin),
+  )[0];
+
+  const rankedProfitLeaks = [...data.profitLeaks].sort(
+    (a, b) => b.estimatedWeeklyLoss - a.estimatedWeeklyLoss,
+  );
+  const biggestLeak = rankedProfitLeaks[0];
+  const menuPricingLeakage = data.profitLeaks
+    .filter((leak) =>
+      `${leak.category} ${leak.source}`.toLowerCase().includes("menu"),
+    )
+    .reduce((total, leak) => total + leak.estimatedWeeklyLoss, 0);
+  const estimatedStockoutImpact = data.profitLeaks
+    .filter((leak) => {
+      const searchableLeak = `${leak.category} ${leak.source}`.toLowerCase();
+      return (
+        searchableLeak.includes("inventory") ||
+        searchableLeak.includes("stockout") ||
+        searchableLeak.includes("stock out")
+      );
+    })
+    .reduce((total, leak) => total + leak.estimatedWeeklyLoss, 0);
 
   const estimatedProfit = useMemo(
     () =>
@@ -206,11 +400,34 @@ function App() {
     data.businessProjection.projectedNextWeekRevenue;
   const forecastProfit = automationForecast?.next7DaysProfit ??
     data.businessProjection.projectedNextWeekProfit;
+  const bestForecastScenario = automationForecast?.scenarios
+    .slice()
+    .sort((a, b) => b.profitImpact - a.profitImpact)[0];
+  const worstForecastScenario = automationForecast?.scenarios
+    .slice()
+    .sort((a, b) => a.profitImpact - b.profitImpact)[0];
+  const overtimeCost =
+    data.payrollMetrics.overtimeCost ??
+    data.payrollStaffShifts.reduce(
+      (total, shift) =>
+        total + shift.overtimeHours * shift.hourlyRate * 1.25,
+      0,
+    );
+  const payrollStaffCount =
+    data.payrollMetrics.staffCount ??
+    new Set(data.payrollStaffShifts.map((shift) => shift.employeeName)).size;
+  const payrollStatus =
+    data.payrollMetrics.payrollStatus ||
+    (data.overview.payrollPercent <= 26
+      ? "On Track"
+      : data.overview.payrollPercent > 28
+        ? "High"
+        : "Watch");
 
   const overviewCards: OverviewCardDefinition[] = [
     {
-      id: "total-revenue",
-      label: "Total Revenue",
+      id: "revenue",
+      label: "Revenue",
       value: formatCurrency(data.overview.revenueThisWeek),
       helper: "Current week revenue snapshot",
       tone: "blue",
@@ -242,7 +459,7 @@ function App() {
     },
     {
       id: "payroll-percent",
-      label: "Payroll %",
+      label: "Payroll % of Sales",
       value: formatPercent(data.overview.payrollPercent),
       helper: "Target range is 22% to 26%",
       tone: "coral",
@@ -265,20 +482,101 @@ function App() {
       icon: AlertTriangle,
     },
     {
-      id: "critical-inventory",
-      label: "Critical Inventory Count",
-      value: String(criticalInventoryCount),
-      helper: "Items that need immediate reorder attention",
-      tone: "violet",
-      icon: CalendarRange,
+      id: "biggest-leak",
+      label: "Biggest Leak",
+      value: biggestLeak?.source ?? "No active leak",
+      helper: biggestLeak
+        ? formatCurrency(biggestLeak.estimatedWeeklyLoss) + " estimated impact"
+        : "No current profit leak signal",
+      tone: "coral",
+      icon: ShieldAlert,
     },
     {
-      id: "underpriced-menu",
-      label: "Underpriced Menu Items",
-      value: String(underpricedMenuItems),
-      helper: "Items below target margin",
+      id: "menu-pricing-leakage",
+      label: "Menu Pricing Leakage",
+      value: formatCurrency(menuPricingLeakage),
+      helper: "Leakage attributed to menu pricing signals",
       tone: "amber",
       icon: Utensils,
+    },
+    {
+      id: "inventory-risk-count",
+      label: "Inventory Risk Count",
+      value: String(inventoryRiskCount),
+      helper: "Critical and watch inventory items",
+      tone: "violet",
+      icon: PackageCheck,
+    },
+    {
+      id: "recommended-action",
+      label: "Recommended Action",
+      value: biggestLeak?.recommendedAction ?? "No action required",
+      helper: biggestLeak?.source ?? "No active profit leak signal",
+      tone: "coral",
+      icon: Sparkles,
+    },
+    {
+      id: "critical-items",
+      label: "Critical Items",
+      value: String(criticalInventoryCount),
+      helper: "Items that need immediate reorder attention",
+      tone: "coral",
+      icon: ShieldAlert,
+    },
+    {
+      id: "watch-items",
+      label: "Watch Items",
+      value: String(watchInventoryCount),
+      helper: "Items approaching reorder level",
+      tone: "amber",
+      icon: PackageCheck,
+    },
+    {
+      id: "safe-items",
+      label: "Safe Items",
+      value: String(safeInventoryCount),
+      helper: "Items with healthy stock coverage",
+      tone: "emerald",
+      icon: PackageCheck,
+    },
+    {
+      id: "top-reorder-priority",
+      label: "Top Reorder Priority",
+      value: topReorderPriority?.item ?? "No inventory data",
+      helper: topReorderPriority
+        ? `${topReorderPriority.suggestedReorder} ${topReorderPriority.unit} suggested reorder`
+        : "Awaiting inventory rows",
+      tone: "coral",
+      icon: Truck,
+    },
+    {
+      id: "lowest-days-left",
+      label: "Lowest Days Left",
+      value: lowestCoverageItem
+        ? calculateDaysLeft(
+            lowestCoverageItem.currentStock,
+            lowestCoverageItem.dailyUsage,
+          ).toFixed(1) + " days"
+        : "Unavailable",
+      helper: lowestCoverageItem?.item ?? "Awaiting inventory rows",
+      tone: "amber",
+      icon: Clock3,
+    },
+    {
+      id: "stockout-impact",
+      label: "Estimated Stockout Impact",
+      value: formatCurrency(estimatedStockoutImpact),
+      helper: "Current inventory and stockout leakage signals",
+      tone: "coral",
+      icon: AlertTriangle,
+    },
+    {
+      id: "supplier-count",
+      label: "Supplier Count",
+      value: String(supplierCount),
+      helper: "Unique suppliers in current inventory data",
+      tone: "blue",
+      icon: Truck,
     },
     {
       id: "forecast-revenue",
@@ -297,35 +595,169 @@ function App() {
       icon: Banknote,
     },
     {
-      id: "revenue-today",
-      label: "Revenue Today",
-      value: formatCurrency(data.overview.revenueToday),
-      helper: "Latest daily sales snapshot",
-      tone: "ink",
-      icon: CircleDollarSign,
+      id: "forecast-confidence",
+      label: "Forecast Confidence",
+      value: automationForecast?.confidence ?? "Unavailable",
+      helper: "Confidence returned by current forecast data",
+      tone: "violet",
+      icon: Activity,
+    },
+    {
+      id: "forecast-trend",
+      label: "Trend",
+      value: automationForecast?.trend ?? "Unavailable",
+      helper: "Current forecast trend",
+      tone: "blue",
+      icon: TrendingUp,
+    },
+    {
+      id: "best-scenario",
+      label: "Best Scenario",
+      value: bestForecastScenario?.name ?? "Unavailable",
+      helper: bestForecastScenario
+        ? formatCurrency(bestForecastScenario.profitImpact) + " profit impact"
+        : "Awaiting live scenarios",
+      tone: "emerald",
+      icon: TrendingUp,
+    },
+    {
+      id: "worst-scenario",
+      label: "Worst Scenario",
+      value: worstForecastScenario?.name ?? "Unavailable",
+      helper: worstForecastScenario
+        ? formatCurrency(worstForecastScenario.profitImpact) + " profit impact"
+        : "Awaiting live scenarios",
+      tone: "coral",
+      icon: AlertTriangle,
+    },
+    {
+      id: "forecast-main-risk",
+      label: "Main Forecast Risk",
+      value: data.businessProjection.riskSummary || "Unavailable",
+      helper: "Current projection risk summary",
+      tone: "amber",
+      icon: ShieldAlert,
+    },
+    {
+      id: "gross-payroll",
+      label: "Gross Payroll",
+      value: formatCurrency(data.payrollMetrics.totalPayrollThisWeek),
+      helper: "Gross payroll in current dashboard data",
+      tone: "blue",
+      icon: Users,
+    },
+    {
+      id: "net-payroll",
+      label: "Net Payroll",
+      value:
+        data.payrollMetrics.netPayroll !== undefined
+          ? formatCurrency(data.payrollMetrics.netPayroll)
+          : "Unavailable",
+      helper: "Uses live net payroll when supplied",
+      tone: "emerald",
+      icon: Banknote,
+    },
+    {
+      id: "overtime-cost",
+      label: "Overtime Cost",
+      value: formatCurrency(overtimeCost),
+      helper: "Live summary or calculated from current shift rows",
+      tone: "coral",
+      icon: Clock3,
+    },
+    {
+      id: "staff-count",
+      label: "Staff Count",
+      value: String(payrollStaffCount),
+      helper: "Unique staff in current payroll data",
+      tone: "violet",
+      icon: Users,
+    },
+    {
+      id: "payroll-status",
+      label: "Payroll Status",
+      value: payrollStatus,
+      helper: "Compared with the current payroll target range",
+      tone: payrollStatus === "On Track" ? "emerald" : "amber",
+      icon: ClipboardList,
+    },
+    {
+      id: "underpriced-items",
+      label: "Underpriced Items",
+      value: String(underpricedMenuItems),
+      helper: "Items below target margin",
+      tone: "amber",
+      icon: Utensils,
+    },
+    {
+      id: "average-margin",
+      label: "Average Margin",
+      value: formatPercent(averageMenuMargin),
+      helper: "Average margin across current menu items",
+      tone: "emerald",
+      icon: Percent,
+    },
+    {
+      id: "top-underpriced-item",
+      label: "Top Underpriced Item",
+      value: topUnderpricedItem?.menuItem ?? "No underpriced item",
+      helper: topUnderpricedItem
+        ? formatPercent(topUnderpricedItem.margin) + " current margin"
+        : "All current items meet target",
+      tone: "amber",
+      icon: Utensils,
+    },
+    {
+      id: "recommended-price-action",
+      label: "Recommended Price Action",
+      value: topUnderpricedItem?.recommendation ?? "No action required",
+      helper: topUnderpricedItem?.menuItem ?? "No underpriced item",
+      tone: "amber",
+      icon: Sparkles,
     },
   ];
 
-  const visibleOverviewCards = overviewCards.filter((card) =>
-    overviewCardIds.includes(card.id),
+  const overviewCardsById = new Map(
+    overviewCards.map((card) => [card.id, card]),
   );
+  const visibleOverviewCards = overviewCardIds
+    .map((cardId) => overviewCardsById.get(cardId))
+    .filter((card): card is OverviewCardDefinition => Boolean(card));
 
   const refreshData = async () => {
     setIsRefreshing(true);
 
     try {
-      const automationRefresh = await refreshDashboardFromAutomation();
-      applyAutomationContext(automationRefresh);
+      const response = await refreshDashboardFromAutomation();
+
+      console.log("Refresh dashboard response", response);
+
+      setDashboard((currentDashboard) => {
+        const appliedRefresh = applyAutomationRefresh(
+          currentDashboard.data,
+          response,
+        );
+
+        return {
+          data: appliedRefresh.data,
+          forecast: appliedRefresh.forecast,
+          healthScore: appliedRefresh.healthScore,
+          totalEstimatedLeakage: appliedRefresh.totalEstimatedLeakage,
+          generatedAt: appliedRefresh.generatedAt ?? new Date(),
+          dataSourceMode: "Live n8n data",
+          latestAutomationPayload: response,
+        };
+      });
+
+      console.log("Updated dashboard state", response.generatedAt);
       setRefreshWarning(null);
-      setDataSourceMode("Live n8n data");
     } catch (error) {
       console.warn(error);
-      setData(cloneData(mockRestaurantData));
-      setAutomationForecast(undefined);
-      setAutomationHealthScore(undefined);
-      setAutomationTotalLeakage(undefined);
-      setLastSynced(new Date());
-      setDataSourceMode("Demo fallback data");
+      setDashboard({
+        data: cloneData(mockRestaurantData),
+        generatedAt: new Date(),
+        dataSourceMode: "Demo fallback data",
+      });
       setRefreshWarning("Using demo data because live automation is unavailable.");
     } finally {
       setIsRefreshing(false);
@@ -333,86 +765,35 @@ function App() {
   };
 
   const applyAutomationContext = (payload: AutomationDashboardPayload) => {
-    const appliedRefresh = applyAutomationRefresh(data, payload);
+    setDashboard((currentDashboard) => {
+      const appliedRefresh = applyAutomationRefresh(
+        currentDashboard.data,
+        payload,
+      );
 
-    setData(appliedRefresh.data);
-    setAutomationForecast(appliedRefresh.forecast);
-    setAutomationHealthScore(appliedRefresh.healthScore);
-    setAutomationTotalLeakage(appliedRefresh.totalEstimatedLeakage);
-    setDataSourceMode("Live n8n data");
+      return {
+        data: appliedRefresh.data,
+        forecast: appliedRefresh.forecast ?? currentDashboard.forecast,
+        healthScore: appliedRefresh.healthScore ?? currentDashboard.healthScore,
+        totalEstimatedLeakage:
+          appliedRefresh.totalEstimatedLeakage ??
+          currentDashboard.totalEstimatedLeakage,
+        generatedAt: appliedRefresh.generatedAt ?? currentDashboard.generatedAt,
+        dataSourceMode: "Live n8n data",
+        latestAutomationPayload: payload,
+      };
+    });
+  };
 
-    if (appliedRefresh.generatedAt) {
-      setLastSynced(appliedRefresh.generatedAt);
-    }
+  const applyOverviewLayout = (layout: OverviewLayoutPreset) => {
+    setActiveOverviewLayout(layout);
+    setOverviewCardIds([...overviewLayoutPresets[layout]]);
+    setOverviewLayoutNote(`AI-assisted layout applied: ${layout}`);
   };
 
   const applyOverviewCustomization = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const intent = overviewIntent.trim().toLowerCase();
-
-    if (!intent) {
-      setOverviewCardIds(defaultOverviewCardIds);
-      setOverviewLayoutNote("AI-assisted layout reset to owner snapshot.");
-      return;
-    }
-
-    const groups = [
-      {
-        keywords: ["owner", "owner-level", "executive", "summary"],
-        cards: [
-          "total-revenue",
-          "estimated-profit",
-          "profit-margin",
-          "health-score",
-          "estimated-leakage",
-          "forecast-revenue",
-        ],
-      },
-      {
-        keywords: ["inventory", "stock", "reorder", "supplier"],
-        cards: ["critical-inventory", "estimated-leakage"],
-      },
-      {
-        keywords: ["leak", "leakage", "risk", "loss"],
-        cards: ["estimated-leakage", "health-score", "critical-inventory", "underpriced-menu"],
-      },
-      {
-        keywords: ["forecast", "next week", "next 7", "projection"],
-        cards: ["forecast-revenue", "forecast-profit", "estimated-profit"],
-      },
-      {
-        keywords: ["profit", "margin", "food cost", "cost"],
-        cards: ["estimated-profit", "profit-margin", "food-cost-percent", "forecast-profit"],
-      },
-      {
-        keywords: ["payroll", "labor", "staff", "overtime"],
-        cards: ["payroll-percent", "estimated-leakage", "health-score"],
-      },
-      {
-        keywords: ["menu", "pricing", "price", "underpriced"],
-        cards: ["underpriced-menu", "profit-margin", "food-cost-percent"],
-      },
-      {
-        keywords: ["today", "daily"],
-        cards: ["revenue-today", "health-score", "critical-inventory"],
-      },
-    ];
-
-    const matchedCards = unique(
-      groups.flatMap((group) =>
-        group.keywords.some((keyword) => intent.includes(keyword)) ? group.cards : [],
-      ),
-    );
-    const requestedCards = matchedCards.length > 0 ? matchedCards : defaultOverviewCardIds;
-    const shouldAdd = intent.includes("add") || intent.includes("include");
-    const nextIds = shouldAdd
-      ? unique([...overviewCardIds, ...requestedCards])
-      : requestedCards;
-
-    setOverviewCardIds(
-      overviewCards.map((card) => card.id).filter((id) => nextIds.includes(id)),
-    );
-    setOverviewLayoutNote("AI-assisted layout suggestion applied.");
+    applyOverviewLayout(detectOverviewLayout(overviewIntent.trim()));
   };
 
   const page = pageMeta[activePage];
@@ -438,13 +819,32 @@ function App() {
                 <Sparkles aria-hidden="true" size={16} />
                 AI layout assistant
               </span>
-              <strong>Customize the owner snapshot</strong>
+              <strong>Customize the Overview focus</strong>
             </div>
+
+            <div className="overview-layout-presets" aria-label="Overview layout presets">
+              {overviewLayoutOptions.map((layout) => (
+                <button
+                  aria-pressed={activeOverviewLayout === layout}
+                  className={
+                    activeOverviewLayout === layout
+                      ? "filter-chip filter-chip--active"
+                      : "filter-chip"
+                  }
+                  key={layout}
+                  onClick={() => applyOverviewLayout(layout)}
+                  type="button"
+                >
+                  {layout}
+                </button>
+              ))}
+            </div>
+
             <form onSubmit={applyOverviewCustomization}>
               <input
                 aria-label="Customize overview metrics"
                 onChange={(event) => setOverviewIntent(event.target.value)}
-                placeholder="Try: Show food cost risk, reorder urgency, top profit leak, forecasted profit..."
+                placeholder="Try: Focus on inventory risk, payroll, menu pricing, or next week..."
                 type="text"
                 value={overviewIntent}
               />
@@ -506,7 +906,10 @@ function App() {
     if (activePage === "inventory") {
       return (
         <>
-          <InventoryRiskTable items={data.inventory} />
+          <InventoryRiskTable
+            items={data.inventory}
+            summary={data.inventorySummary}
+          />
           <AiActionBox
             defaultQuestion="Which inventory items should I reorder first and why?"
             helper="Use this for reorder priority and supplier timing decisions."
@@ -564,7 +967,13 @@ function App() {
       );
     }
 
-    return <AiReportsPanel reports={data.reportTemplates} />;
+    return (
+      <AiReportsPanel
+        dashboardHealthScore={healthScore}
+        dashboardTotalLeakage={totalLeakage}
+        reports={data.reportTemplates}
+      />
+    );
   };
 
   return (
@@ -591,6 +1000,23 @@ function App() {
           <div className="sync-cluster">
             <span>Last updated: {lastSynced.toLocaleString()}</span>
             <span className="data-source-pill">Data source: {dataSourceMode}</span>
+            <button
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              className="button button--ghost theme-toggle"
+              onClick={() =>
+                setTheme((currentTheme) =>
+                  currentTheme === "dark" ? "light" : "dark",
+                )
+              }
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              type="button"
+            >
+              {theme === "dark" ? (
+                <Sun aria-hidden="true" size={18} />
+              ) : (
+                <Moon aria-hidden="true" size={18} />
+              )}
+            </button>
             <button
               className="button button--primary"
               disabled={isRefreshing}

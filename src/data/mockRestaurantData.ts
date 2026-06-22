@@ -34,6 +34,13 @@ export interface InventoryItem {
   status: InventoryStatus;
 }
 
+export interface InventorySummary {
+  criticalCount?: number;
+  watchCount?: number;
+  safeCount?: number;
+  totalItems?: number;
+}
+
 export interface MenuItemProfitability {
   id: string;
   menuItem: string;
@@ -50,6 +57,10 @@ export interface PayrollMetric {
   targetPayrollRange: string;
   estimatedPayrollLeakage: number;
   overstaffedDays: number;
+  netPayroll?: number;
+  overtimeCost?: number;
+  staffCount?: number;
+  payrollStatus?: string;
 }
 
 export interface PayrollDay {
@@ -99,6 +110,7 @@ export interface RestaurantData {
   aiSummary: string;
   profitLeaks: ProfitLeak[];
   inventory: InventoryItem[];
+  inventorySummary?: InventorySummary;
   menuProfitability: MenuItemProfitability[];
   payrollMetrics: PayrollMetric;
   payroll: PayrollDay[];

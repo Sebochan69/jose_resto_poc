@@ -1,6 +1,7 @@
 import type {
   BusinessProjection,
   InventoryItem,
+  InventorySummary,
   MenuItemProfitability,
   PayrollDay,
   PayrollMetric,
@@ -29,8 +30,18 @@ const isObject = (value: unknown): value is Record<string, unknown> =>
 const isObjectArray = (value: unknown): value is Record<string, unknown>[] =>
   Array.isArray(value) && value.every(isObject);
 
-const asNumber = (value: unknown) =>
-  typeof value === "number" && Number.isFinite(value) ? value : undefined;
+const asNumber = (value: unknown) => {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    const parsedValue = Number(value);
+    return Number.isFinite(parsedValue) ? parsedValue : undefined;
+  }
+
+  return undefined;
+};
 
 const asString = (value: unknown) => (typeof value === "string" ? value : undefined);
 
@@ -45,6 +56,22 @@ const pickNumber = (
   source: Record<string, unknown>,
   keys: string[],
   fallback: number,
+) => {
+  for (const key of keys) {
+    const value = asNumber(source[key]);
+
+    if (value !== undefined) {
+      return value;
+    }
+  }
+
+  return fallback;
+};
+
+const pickOptionalNumber = (
+  source: Record<string, unknown>,
+  keys: string[],
+  fallback?: number,
 ) => {
   for (const key of keys) {
     const value = asNumber(source[key]);
@@ -111,6 +138,35 @@ const pickArray = (
   return undefined;
 };
 
+const pickNestedArray = (
+  source: Record<string, unknown> | undefined,
+  containerKeys: string[],
+  rowKeys: string[],
+) => {
+  const container = pickObject(source, containerKeys);
+  return pickArray(container, rowKeys);
+};
+
+const pickNumberFromSources = (
+  sources: Array<Record<string, unknown> | undefined>,
+  keys: string[],
+  fallback: number,
+) => {
+  for (const source of sources) {
+    if (!source) {
+      continue;
+    }
+
+    const value = pickNumber(source, keys, Number.NaN);
+
+    if (Number.isFinite(value)) {
+      return value;
+    }
+  }
+
+  return fallback;
+};
+
 const isSeverity = (value: string): value is Severity =>
   ["Critical", "High", "Medium", "Low"].includes(value);
 
@@ -148,6 +204,10 @@ const normalizePayrollStatus = (value: unknown): PayrollDay["status"] => {
     return label;
   }
 
+  if (label === "Good" || label === "Normal" || label === "Efficient") {
+    return "On Track";
+  }
+
   return "Watch";
 };
 
@@ -156,35 +216,60 @@ const normalizeOverview = (
   metrics?: Record<string, unknown>,
 ): RestaurantData["overview"] => {
   const overview = pickObject(metrics, ["overview", "kpis", "summaryMetrics"]);
-  const source = overview ?? metrics;
+  const sales = pickObject(metrics, ["sales", "revenue"]);
+  const foodCost = pickObject(metrics, ["foodCost", "food_cost"]);
+  const payroll = pickObject(metrics, ["payroll", "payrollSummary", "labor"]);
+  const payrollSummary = pickObject(payroll, ["summary", "metrics"]);
+  const expenses = pickObject(metrics, ["expenses", "operatingExpenses"]);
 
-  if (!source) {
+  if (!metrics) {
     return current;
   }
 
   return {
-    revenueToday: pickNumber(
-      source,
-      ["revenueToday", "todayRevenue", "revenue_today"],
+    revenueToday: pickNumberFromSources(
+      [overview, sales, metrics],
+      ["revenueToday", "todayRevenue", "revenue_today", "today"],
       current.revenueToday,
     ),
-    revenueThisWeek: pickNumber(
-      source,
-      ["revenueThisWeek", "weeklyRevenue", "totalRevenue", "revenue_this_week"],
+    revenueThisWeek: pickNumberFromSources(
+      [overview, sales, metrics],
+      [
+        "revenueThisWeek",
+        "weeklyRevenue",
+        "totalRevenue",
+        "revenue_this_week",
+        "revenue",
+      ],
       current.revenueThisWeek,
     ),
-    foodCostPercent: pickNumber(
-      source,
-      ["foodCostPercent", "foodCostPct", "food_cost_percent"],
+    foodCostPercent: pickNumberFromSources(
+      [overview, foodCost, metrics],
+      [
+        "foodCostPercent",
+        "foodCostPct",
+        "food_cost_percent",
+        "percentage",
+        "percent",
+        "pct",
+      ],
       current.foodCostPercent,
     ),
-    payrollPercent: pickNumber(
-      source,
-      ["payrollPercent", "payrollPct", "payroll_percent"],
+    payrollPercent: pickNumberFromSources(
+      [overview, payrollSummary, payroll, metrics],
+      [
+        "payrollPercent",
+        "payrollPct",
+        "payroll_percent",
+        "payrollPctOfSales",
+        "percentage",
+        "percent",
+        "pct",
+      ],
       current.payrollPercent,
     ),
-    otherOperatingCostPercent: pickNumber(
-      source,
+    otherOperatingCostPercent: pickNumberFromSources(
+      [overview, expenses, metrics],
       [
         "otherOperatingCostPercent",
         "operatingCostPercent",
@@ -201,8 +286,19 @@ const normalizeProfitLeaks = (
   metrics?: Record<string, unknown>,
   intelligence?: Record<string, unknown>,
 ) => {
-  const rows = pickArray(intelligence, ["profitLeaks", "leaks", "riskSignals"]) ??
-    pickArray(metrics, ["profitLeaks", "leaks", "riskSignals"]);
+  const rows =
+    pickArray(intelligence, [
+      "profitLeaks",
+      "leaks",
+      "riskSignals",
+      "risks",
+    ]) ??
+    pickNestedArray(
+      intelligence,
+      ["profitLeakAnalysis", "riskIntelligence"],
+      ["profitLeaks", "leaks", "riskSignals", "risks", "items"],
+    ) ??
+    pickArray(metrics, ["profitLeaks", "leaks", "riskSignals", "risks"]);
 
   if (!rows) {
     return current;
@@ -231,8 +327,31 @@ const normalizeInventory = (
   metrics?: Record<string, unknown>,
   intelligence?: Record<string, unknown>,
 ) => {
-  const rows = pickArray(intelligence, ["inventory", "inventoryRisks", "stockRisks"]) ??
-    pickArray(metrics, ["inventory", "inventoryRisks", "stockRisks"]);
+  const liveInventory = metrics?.inventory;
+  const liveInventoryRows = isObjectArray(liveInventory)
+    ? liveInventory
+    : isObject(liveInventory)
+      ? pickArray(liveInventory, ["items", "all", "rows", "data"]) ?? []
+      : undefined;
+  const rows =
+    liveInventoryRows ??
+    pickArray(metrics, ["inventoryItems", "inventoryRisks", "stockRisks"]) ??
+    pickNestedArray(
+      metrics,
+      ["inventoryMetrics", "stock"],
+      ["items", "all", "rows", "data", "risks", "inventory"],
+    ) ??
+    pickArray(intelligence, [
+      "inventory",
+      "inventoryItems",
+      "inventoryRisks",
+      "stockRisks",
+    ]) ??
+    pickNestedArray(
+      intelligence,
+      ["inventory", "inventoryIntelligence", "stock"],
+      ["items", "all", "rows", "data", "risks", "inventory"],
+    );
 
   if (!rows) {
     return current;
@@ -263,13 +382,74 @@ const normalizeInventory = (
   });
 };
 
+const normalizeInventorySummary = (
+  metrics: Record<string, unknown> | undefined,
+  inventory: InventoryItem[],
+): InventorySummary => {
+  const liveInventory = isObject(metrics?.inventory)
+    ? metrics.inventory
+    : undefined;
+
+  return {
+    criticalCount: liveInventory
+      ? pickNumber(
+          liveInventory,
+          ["criticalCount", "critical_count"],
+          inventory.filter((item) => item.status === "Critical").length,
+        )
+      : undefined,
+    watchCount: liveInventory
+      ? pickNumber(
+          liveInventory,
+          ["watchCount", "watch_count"],
+          inventory.filter((item) => item.status === "Watch").length,
+        )
+      : undefined,
+    safeCount: liveInventory
+      ? pickNumber(
+          liveInventory,
+          ["safeCount", "safe_count"],
+          inventory.filter((item) => item.status === "Safe").length,
+        )
+      : undefined,
+    totalItems: liveInventory
+      ? pickNumber(
+          liveInventory,
+          ["totalItems", "total_items", "count"],
+          inventory.length,
+        )
+      : undefined,
+  };
+};
+
 const normalizeMenuProfitability = (
   current: MenuItemProfitability[],
   metrics?: Record<string, unknown>,
   intelligence?: Record<string, unknown>,
 ) => {
-  const rows = pickArray(intelligence, ["menuProfitability", "menuItems", "menuRisks"]) ??
-    pickArray(metrics, ["menuProfitability", "menuItems", "menuRisks"]);
+  const rows =
+    pickArray(metrics, [
+      "menuProfitability",
+      "menuItems",
+      "menuRisks",
+      "menu",
+    ]) ??
+    pickNestedArray(
+      metrics,
+      ["menu", "menuMetrics", "menuPricing"],
+      ["items", "rows", "data", "menuItems", "menuProfitability"],
+    ) ??
+    pickArray(intelligence, [
+      "menuProfitability",
+      "menuItems",
+      "menuRisks",
+      "menu",
+    ]) ??
+    pickNestedArray(
+      intelligence,
+      ["menu", "menuIntelligence", "menuPricing"],
+      ["items", "rows", "data", "menuItems", "menuProfitability"],
+    );
 
   if (!rows) {
     return current;
@@ -299,7 +479,11 @@ const normalizePayrollMetrics = (
   current: PayrollMetric,
   metrics?: Record<string, unknown>,
 ) => {
-  const source = pickObject(metrics, ["payrollMetrics", "payrollSummary", "labor"]);
+  const payroll = pickObject(metrics, ["payroll", "labor"]);
+  const source =
+    pickObject(metrics, ["payrollMetrics", "payrollSummary"]) ??
+    pickObject(payroll, ["summary", "metrics"]) ??
+    payroll;
 
   if (!source) {
     return current;
@@ -326,11 +510,37 @@ const normalizePayrollMetrics = (
       ["overstaffedDays", "overstaffed_days"],
       current.overstaffedDays,
     ),
+    netPayroll: pickOptionalNumber(
+      source,
+      ["netPayroll", "net_payroll"],
+      current.netPayroll,
+    ),
+    overtimeCost: pickOptionalNumber(
+      source,
+      ["overtimeCost", "overtime_cost", "otPay", "ot_pay"],
+      current.overtimeCost,
+    ),
+    staffCount: pickOptionalNumber(
+      source,
+      ["staffCount", "staff_count", "employeeCount", "employee_count"],
+      current.staffCount,
+    ),
+    payrollStatus: pickString(
+      source,
+      ["payrollStatus", "payroll_status", "status"],
+      current.payrollStatus ?? "",
+    ),
   };
 };
 
 const normalizePayroll = (current: PayrollDay[], metrics?: Record<string, unknown>) => {
-  const rows = pickArray(metrics, ["payroll", "payrollDays", "laborDays"]);
+  const rows =
+    pickArray(metrics, ["payrollDays", "laborDays", "payrollDaily"]) ??
+    pickNestedArray(
+      metrics,
+      ["payroll", "labor"],
+      ["daily", "days", "rows", "data", "payrollDays"],
+    );
 
   if (!rows) {
     return current;
@@ -355,27 +565,56 @@ const normalizeStaffShifts = (
   current: PayrollStaffShift[],
   metrics?: Record<string, unknown>,
 ) => {
-  const rows = pickArray(metrics, ["payrollStaffShifts", "staffShifts", "shifts"]);
+  const rows =
+    pickArray(metrics, ["payrollStaffShifts", "staffShifts", "shifts"]) ??
+    pickNestedArray(
+      metrics,
+      ["payroll", "labor"],
+      ["staffShifts", "shifts", "employees", "rows", "data"],
+    );
 
   if (!rows) {
     return current;
   }
 
-  return rows.map((row, index) => ({
-    id: pickString(row, ["id"], `shift-${index + 1}`),
-    day: pickString(row, ["day", "date"], "Day"),
-    employeeName: pickString(
+  return rows.map((row, index) => {
+    const dailyRate = pickNumber(row, ["dailyRate", "daily_rate"], 0);
+    const hourlyRate = pickNumber(
       row,
-      ["employeeName", "employee_name", "employee"],
-      "Team member",
-    ),
-    role: pickString(row, ["role"], "Staff"),
-    shift: pickString(row, ["shift"], "Shift"),
-    regularHours: pickNumber(row, ["regularHours", "regular_hours"], 0),
-    overtimeHours: pickNumber(row, ["overtimeHours", "overtime_hours"], 0),
-    hourlyRate: pickNumber(row, ["hourlyRate", "hourly_rate", "rate"], 0),
-    payrollCost: pickNumber(row, ["payrollCost", "payroll_cost", "grossPay"], 0),
-  }));
+      ["hourlyRate", "hourly_rate", "rate"],
+      dailyRate > 0 ? dailyRate / 8 : 0,
+    );
+    const overtimePay = pickNumber(row, ["otPay", "ot_pay", "overtimePay"], 0);
+    const daysWorked = pickNumber(row, ["daysWorked", "days_worked"], 1);
+
+    return {
+      id: pickString(row, ["id"], `shift-${index + 1}`),
+      day: pickString(row, ["day", "date"], "Day"),
+      employeeName: pickString(
+        row,
+        ["employeeName", "employee_name", "employee"],
+        "Team member",
+      ),
+      role: pickString(row, ["role"], "Staff"),
+      shift: pickString(row, ["shift"], "Shift"),
+      regularHours: pickNumber(
+        row,
+        ["regularHours", "regular_hours"],
+        daysWorked * 8,
+      ),
+      overtimeHours: pickNumber(
+        row,
+        ["overtimeHours", "overtime_hours"],
+        hourlyRate > 0 ? overtimePay / (hourlyRate * 1.25) : 0,
+      ),
+      hourlyRate,
+      payrollCost: pickNumber(
+        row,
+        ["payrollCost", "payroll_cost", "grossPay", "gross_pay"],
+        dailyRate + overtimePay,
+      ),
+    };
+  });
 };
 
 const isForecastScenario = (value: unknown): value is ForecastScenario =>
@@ -436,11 +675,17 @@ export const applyAutomationRefresh = (
     : undefined;
 
   const forecast = isForecastData(response.forecast) ? response.forecast : undefined;
+  const inventory = normalizeInventory(
+    currentData.inventory,
+    metrics,
+    intelligence,
+  );
   const nextData: RestaurantData = {
     ...currentData,
     overview: normalizeOverview(currentData.overview, metrics),
     profitLeaks: normalizeProfitLeaks(currentData.profitLeaks, metrics, intelligence),
-    inventory: normalizeInventory(currentData.inventory, metrics, intelligence),
+    inventory,
+    inventorySummary: normalizeInventorySummary(metrics, inventory),
     menuProfitability: normalizeMenuProfitability(
       currentData.menuProfitability,
       metrics,

@@ -9,7 +9,15 @@ import type {
 } from "../types";
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
-  Boolean(value) && typeof value === "object";
+  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+const unwrapEventResponse = (value: unknown) => {
+  if (Array.isArray(value) && value.length === 1) {
+    return value[0];
+  }
+
+  return value;
+};
 
 const getWebhookUrl = () => {
   const webhookUrl = import.meta.env.VITE_N8N_EVENTS_WEBHOOK_URL;
@@ -41,7 +49,7 @@ export async function sendRestoPilotEvent(
   }
 
   try {
-    return await response.json();
+    return unwrapEventResponse(await response.json());
   } catch {
     throw new Error(
       "n8n event webhook returned invalid JSON. Falling back to dashboard demo data.",

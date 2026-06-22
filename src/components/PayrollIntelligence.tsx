@@ -1,5 +1,5 @@
-import { Search, Users } from "lucide-react";
-import { useMemo, useState } from "react";
+import { CalendarDays, Search, Users } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import type {
   PayrollDay,
   PayrollMetric,
@@ -19,7 +19,6 @@ interface PayrollIntelligenceProps {
   staffShifts: PayrollStaffShift[];
 }
 
-const allDates = "All Dates";
 const allRoles = "All Roles";
 const allShifts = "All Shifts";
 const allStatuses = "All Statuses";
@@ -28,6 +27,27 @@ const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 type ShiftPeriod = "Lunch" | "Dinner" | "Closing";
 type EmployeeStatus = "Normal" | "Overtime Watch";
 type SortMode = "date" | "payroll" | "overtime";
+type DateFilterMode = "all" | "day" | "week";
+
+const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+const getIsoWeekValue = (dateValue: string) => {
+  if (!isoDatePattern.test(dateValue)) {
+    return "";
+  }
+
+  const date = new Date(`${dateValue}T00:00:00Z`);
+  const target = new Date(date);
+  const dayNumber = (date.getUTCDay() + 6) % 7;
+  target.setUTCDate(date.getUTCDate() - dayNumber + 3);
+  const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+  const firstDayNumber = (firstThursday.getUTCDay() + 6) % 7;
+  firstThursday.setUTCDate(firstThursday.getUTCDate() - firstDayNumber + 3);
+  const weekNumber =
+    1 + Math.round((target.getTime() - firstThursday.getTime()) / 604800000);
+
+  return `${target.getUTCFullYear()}-W${String(weekNumber).padStart(2, "0")}`;
+};
 
 const getShiftPeriod = (shift: string): ShiftPeriod => {
   const lowerShift = shift.toLowerCase();
@@ -52,6 +72,10 @@ const getEmployeeStatus = (shift: PayrollStaffShift): EmployeeStatus =>
   shift.overtimeHours > 0 ? "Overtime Watch" : "Normal";
 
 const getDayIndex = (day: string) => {
+  if (isoDatePattern.test(day)) {
+    return new Date(`${day}T00:00:00Z`).getTime();
+  }
+
   const index = dayOrder.indexOf(day);
 
   return index === -1 ? Number.MAX_SAFE_INTEGER : index;
@@ -62,13 +86,49 @@ export function PayrollIntelligence({
   payroll,
   staffShifts,
 }: PayrollIntelligenceProps) {
-  const [selectedDate, setSelectedDate] = useState(allDates);
+  const [dateFilterMode, setDateFilterMode] = useState<DateFilterMode>("all");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedWeek, setSelectedWeek] = useState("");
   const [selectedRole, setSelectedRole] = useState(allRoles);
   const [selectedShift, setSelectedShift] = useState<typeof allShifts | ShiftPeriod>(allShifts);
   const [selectedStatus, setSelectedStatus] = useState<typeof allStatuses | EmployeeStatus>(allStatuses);
   const [employeeSearch, setEmployeeSearch] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("date");
   const [showAllEmployees, setShowAllEmployees] = useState(false);
+
+  const availableDates = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          [...payroll.map((day) => day.day), ...staffShifts.map((shift) => shift.day)]
+            .filter((date) => isoDatePattern.test(date)),
+        ),
+      ).sort(),
+    [payroll, staffShifts],
+  );
+  const earliestDate = availableDates[0] ?? "";
+  const latestDate = availableDates[availableDates.length - 1] ?? "";
+
+  useEffect(() => {
+    if (!latestDate) {
+      return;
+    }
+
+    setSelectedDate((currentDate) => currentDate || latestDate);
+    setSelectedWeek((currentWeek) => currentWeek || getIsoWeekValue(latestDate));
+  }, [latestDate]);
+
+  const matchesDateFilter = (dateValue: string) => {
+    if (dateFilterMode === "all") {
+      return true;
+    }
+
+    if (dateFilterMode === "day") {
+      return Boolean(selectedDate) && dateValue === selectedDate;
+    }
+
+    return Boolean(selectedWeek) && getIsoWeekValue(dateValue) === selectedWeek;
+  };
 
   const weeklySales = payroll.reduce((total, day) => total + day.sales, 0);
   const overtimeCost = staffShifts.reduce(
@@ -88,7 +148,6 @@ export function PayrollIntelligence({
   const staffCount = new Set(staffShifts.map((shift) => shift.employeeName)).size;
   const payrollStatus = payrollPercent > 28 ? "Overtime Watch" : "Normal";
 
-  const dateOptions = [allDates, ...dayOrder.filter((day) => payroll.some((item) => item.day === day))];
   const roleOptions = [
     allRoles,
     ...Array.from(new Set(staffShifts.map((shift) => shift.role))).sort(),
@@ -104,7 +163,7 @@ export function PayrollIntelligence({
     const searchTerm = employeeSearch.trim().toLowerCase();
 
     return staffShifts
-      .filter((shift) => selectedDate === allDates || shift.day === selectedDate)
+      .filter((shift) => matchesDateFilter(shift.day))
       .filter((shift) => selectedRole === allRoles || shift.role === selectedRole)
       .filter(
         (shift) => selectedShift === allShifts || getShiftPeriod(shift.shift) === selectedShift,
@@ -128,7 +187,22 @@ export function PayrollIntelligence({
 
         return getDayIndex(a.day) - getDayIndex(b.day);
       });
-  }, [employeeSearch, selectedDate, selectedRole, selectedShift, selectedStatus, sortMode, staffShifts]);
+  }, [
+    dateFilterMode,
+    employeeSearch,
+    selectedDate,
+    selectedRole,
+    selectedShift,
+    selectedStatus,
+    selectedWeek,
+    sortMode,
+    staffShifts,
+  ]);
+
+  const filteredPayrollDays = useMemo(
+    () => payroll.filter((day) => matchesDateFilter(day.day)),
+    [dateFilterMode, payroll, selectedDate, selectedWeek],
+  );
 
   const visibleEmployees = showAllEmployees
     ? filteredEmployees
@@ -211,11 +285,51 @@ export function PayrollIntelligence({
           </div>
 
           <div className="filter-bar filter-bar--stacked payroll-filter-bar" aria-label="Payroll filters">
-            <select value={selectedDate} onChange={(event) => setSelectedDate(event.target.value)}>
-              {dateOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
+            <div className="payroll-period-filter">
+              <div className="payroll-period-filter__modes" aria-label="Payroll period">
+                {(["all", "day", "week"] as DateFilterMode[]).map((mode) => (
+                  <button
+                    aria-pressed={dateFilterMode === mode}
+                    className={
+                      dateFilterMode === mode
+                        ? "filter-chip filter-chip--active"
+                        : "filter-chip"
+                    }
+                    key={mode}
+                    onClick={() => setDateFilterMode(mode)}
+                    type="button"
+                  >
+                    {mode === "all" ? "All" : mode === "day" ? "Day" : "Week"}
+                  </button>
+                ))}
+              </div>
+
+              {dateFilterMode === "day" ? (
+                <label className="payroll-calendar-field">
+                  <CalendarDays aria-hidden="true" size={16} />
+                  <input
+                    aria-label="Payroll date"
+                    max={latestDate || undefined}
+                    min={earliestDate || undefined}
+                    onChange={(event) => setSelectedDate(event.target.value)}
+                    type="date"
+                    value={selectedDate}
+                  />
+                </label>
+              ) : null}
+
+              {dateFilterMode === "week" ? (
+                <label className="payroll-calendar-field">
+                  <CalendarDays aria-hidden="true" size={16} />
+                  <input
+                    aria-label="Payroll week"
+                    onChange={(event) => setSelectedWeek(event.target.value)}
+                    type="week"
+                    value={selectedWeek}
+                  />
+                </label>
+              ) : null}
+            </div>
             <select value={selectedRole} onChange={(event) => setSelectedRole(event.target.value)}>
               {roleOptions.map((option) => (
                 <option key={option} value={option}>{option}</option>
@@ -273,26 +387,34 @@ export function PayrollIntelligence({
                 </tr>
               </thead>
               <tbody>
-                {visibleEmployees.map((shift) => {
-                  const otPay = shift.overtimeHours * shift.hourlyRate * 1.25;
-                  const deductions = shift.payrollCost * 0.08;
-                  const netPay = shift.payrollCost - deductions;
+                {visibleEmployees.length > 0 ? (
+                  visibleEmployees.map((shift) => {
+                    const otPay = shift.overtimeHours * shift.hourlyRate * 1.25;
+                    const deductions = shift.payrollCost * 0.08;
+                    const netPay = shift.payrollCost - deductions;
 
-                  return (
-                    <tr key={shift.id}>
-                      <td><strong>{shift.day}</strong></td>
-                      <td>{shift.employeeName}</td>
-                      <td>{shift.role}</td>
-                      <td>{shift.shift}</td>
-                      <td>{formatCurrency(shift.hourlyRate * 8)}</td>
-                      <td>{formatCurrency(otPay)}</td>
-                      <td>{formatCurrency(deductions)}</td>
-                      <td>{formatCurrency(shift.payrollCost)}</td>
-                      <td><strong>{formatCurrency(netPay)}</strong></td>
-                      <td><StatusBadge label={getEmployeeStatus(shift)} /></td>
-                    </tr>
-                  );
-                })}
+                    return (
+                      <tr key={shift.id}>
+                        <td><strong>{shift.day}</strong></td>
+                        <td>{shift.employeeName}</td>
+                        <td>{shift.role}</td>
+                        <td>{shift.shift}</td>
+                        <td>{formatCurrency(shift.hourlyRate * 8)}</td>
+                        <td>{formatCurrency(otPay)}</td>
+                        <td>{formatCurrency(deductions)}</td>
+                        <td>{formatCurrency(shift.payrollCost)}</td>
+                        <td><strong>{formatCurrency(netPay)}</strong></td>
+                        <td><StatusBadge label={getEmployeeStatus(shift)} /></td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td className="table-empty-cell" colSpan={10}>
+                      No payroll rows match the selected period and filters.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -345,7 +467,7 @@ export function PayrollIntelligence({
           <details className="payroll-date-details">
             <summary>
               <span>Payroll by Date</span>
-              <strong>{payroll.length} days</strong>
+              <strong>{filteredPayrollDays.length} days</strong>
             </summary>
             <div className="table-wrap table-wrap--spaced">
               <table>
@@ -361,17 +483,25 @@ export function PayrollIntelligence({
                   </tr>
                 </thead>
                 <tbody>
-                  {payroll.map((day) => (
-                    <tr key={day.id}>
-                      <td><strong>{day.day}</strong></td>
-                      <td>{formatCurrency(day.sales)}</td>
-                      <td>{day.staffCount}</td>
-                      <td>{formatCurrency(day.payrollCost)}</td>
-                      <td>{formatPercent(calculatePayrollPercent(day.payrollCost, day.sales))}</td>
-                      <td><StatusBadge label={day.status} /></td>
-                      <td>{day.recommendation}</td>
+                  {filteredPayrollDays.length > 0 ? (
+                    filteredPayrollDays.map((day) => (
+                      <tr key={day.id}>
+                        <td><strong>{day.day}</strong></td>
+                        <td>{formatCurrency(day.sales)}</td>
+                        <td>{day.staffCount}</td>
+                        <td>{formatCurrency(day.payrollCost)}</td>
+                        <td>{formatPercent(calculatePayrollPercent(day.payrollCost, day.sales))}</td>
+                        <td><StatusBadge label={day.status} /></td>
+                        <td>{day.recommendation}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td className="table-empty-cell" colSpan={7}>
+                        No daily payroll records match the selected period.
+                      </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

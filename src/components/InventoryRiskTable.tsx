@@ -1,17 +1,22 @@
 import { ChevronDown, ChevronUp, PackageCheck, ShoppingCart } from "lucide-react";
 import { useMemo, useState } from "react";
-import type { InventoryItem, InventoryStatus } from "../data/mockRestaurantData";
+import type {
+  InventoryItem,
+  InventoryStatus,
+  InventorySummary,
+} from "../data/mockRestaurantData";
 import { calculateDaysLeft } from "../utils/calculations";
 import { SectionCard } from "./SectionCard";
 import { StatusBadge } from "./StatusBadge";
 
 interface InventoryRiskTableProps {
   items: InventoryItem[];
+  summary?: InventorySummary;
 }
 
 const filters: Array<"All" | InventoryStatus> = ["All", "Critical", "Watch", "Safe"];
 
-export function InventoryRiskTable({ items }: InventoryRiskTableProps) {
+export function InventoryRiskTable({ items, summary }: InventoryRiskTableProps) {
   const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
   const [draftedReorder, setDraftedReorder] = useState<string | null>(null);
   const [reorderQuantities, setReorderQuantities] = useState<Record<string, number>>({});
@@ -27,6 +32,14 @@ export function InventoryRiskTable({ items }: InventoryRiskTableProps) {
         : items.filter((item) => item.status === activeFilter),
     [activeFilter, items],
   );
+  const criticalCount = summary?.criticalCount ?? criticalItems.length;
+  const watchCount =
+    summary?.watchCount ??
+    items.filter((item) => item.status === "Watch").length;
+  const safeCount =
+    summary?.safeCount ??
+    items.filter((item) => item.status === "Safe").length;
+  const totalItems = summary?.totalItems ?? items.length;
 
   const getReorderQuantity = (item: InventoryItem) =>
     reorderQuantities[item.id] ?? item.suggestedReorder;
@@ -81,10 +94,29 @@ export function InventoryRiskTable({ items }: InventoryRiskTableProps) {
       action={
         <span className="section-stat">
           <PackageCheck aria-hidden="true" size={17} />
-          {criticalItems.length} critical
+          {criticalCount} critical
         </span>
       }
     >
+      <div className="metric-strip inventory-summary-strip" aria-label="Inventory summary">
+        <div>
+          <span>Critical</span>
+          <strong>{criticalCount}</strong>
+        </div>
+        <div>
+          <span>Watch</span>
+          <strong>{watchCount}</strong>
+        </div>
+        <div>
+          <span>Safe</span>
+          <strong>{safeCount}</strong>
+        </div>
+        <div>
+          <span>Total Items</span>
+          <strong>{totalItems}</strong>
+        </div>
+      </div>
+
       {items.length === 0 ? (
         <div className="empty-state">No inventory data is available yet.</div>
       ) : (

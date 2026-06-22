@@ -19,7 +19,38 @@
   --coral-soft: #ffe5df;
   --violet: #6750c7;
   --violet-soft: #ece8ff;
+  --body-start: #f7f9fc;
+  --body-end: #eef3f8;
+  --surface-muted: #f8fafc;
+  --surface-subtle: #f3f6f9;
+  --text-soft: #29313b;
   --shadow: 0 18px 48px rgba(16, 20, 24, 0.08);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1314;
+  --surface: #171d1c;
+  --surface-strong: #090d0e;
+  --ink: #f2f6f4;
+  --muted: #a7b3af;
+  --line: #303b38;
+  --emerald: #50d1a7;
+  --emerald-soft: #173c32;
+  --blue: #76a7ff;
+  --blue-soft: #1c2d4e;
+  --amber: #e0ad58;
+  --amber-soft: #49381c;
+  --coral: #f07b6d;
+  --coral-soft: #4a2522;
+  --violet: #ad97ff;
+  --violet-soft: #302852;
+  --body-start: #0d1112;
+  --body-end: #141b19;
+  --surface-muted: #1c2422;
+  --surface-subtle: #222b29;
+  --text-soft: #c8d2cf;
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
 }
 
 * {
@@ -34,7 +65,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f7f9fc 0%, #eef3f8 100%);
+  background: linear-gradient(135deg, var(--body-start) 0%, var(--body-end) 100%);
   color: var(--ink);
 }
 
@@ -396,6 +427,12 @@ td span,
   overflow-wrap: anywhere;
   font-size: 1.85rem;
   line-height: 1;
+}
+
+.kpi-card--long-value strong {
+  margin-top: 20px;
+  font-size: 1.08rem;
+  line-height: 1.35;
 }
 
 .kpi-card p {
@@ -1513,6 +1550,12 @@ tbody tr:hover {
   font-weight: 800;
 }
 
+.overview-layout-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -1991,6 +2034,10 @@ tbody tr:hover {
     #fff;
 }
 
+.inventory-summary-strip {
+  margin-bottom: 16px;
+}
+
 .inventory-bulk-action strong {
   color: var(--ink);
   font-size: 1rem;
@@ -2094,6 +2141,53 @@ tbody tr:hover {
 .payroll-breakdown-grid,
 .payroll-date-details {
   margin-top: 16px;
+}
+
+.payroll-period-filter {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 7px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+.payroll-period-filter__modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.payroll-calendar-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  margin-left: auto;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.payroll-calendar-field input {
+  min-height: 34px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 800;
+  outline: none;
+}
+
+.table-empty-cell {
+  padding: 28px 16px;
+  color: var(--muted);
+  font-weight: 800;
+  text-align: center;
 }
 
 .payroll-table-wrap table {
@@ -2237,6 +2331,177 @@ tbody tr:hover {
   background: rgba(255, 255, 255, 0.96);
 }
 
+.theme-toggle {
+  flex: 0 0 42px;
+  width: 42px;
+  padding: 0;
+}
+
+html[data-theme="dark"] .sync-cluster > span:not(.data-source-pill),
+html[data-theme="dark"] .button--ghost,
+html[data-theme="dark"] .button--chip,
+html[data-theme="dark"] .table-wrap,
+html[data-theme="dark"] .projection-note,
+html[data-theme="dark"] .forecast-chart-panel,
+html[data-theme="dark"] .scenario-card,
+html[data-theme="dark"] .delivery-channel,
+html[data-theme="dark"] .markdown-report__table-wrap,
+html[data-theme="dark"] .message,
+html[data-theme="dark"] .chat-input input,
+html[data-theme="dark"] .filter-chip,
+html[data-theme="dark"] .warning-card,
+html[data-theme="dark"] .risk-card,
+html[data-theme="dark"] .category-leak-card,
+html[data-theme="dark"] .mini-list,
+html[data-theme="dark"] .search-field,
+html[data-theme="dark"] .page-report-action__channels label,
+html[data-theme="dark"] .page-report-popover,
+html[data-theme="dark"] .page-report-popover__close,
+html[data-theme="dark"] .reorder-stepper,
+html[data-theme="dark"] .payroll-date-details,
+html[data-theme="dark"] .floating-chat-panel,
+html[data-theme="dark"] .floating-chat-panel__close {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+html[data-theme="dark"] .section-stat,
+html[data-theme="dark"] .metric-strip,
+html[data-theme="dark"] .projection-tile,
+html[data-theme="dark"] .report-panel__insights span,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .insight-panel,
+html[data-theme="dark"] .reorder-stepper button {
+  background: var(--surface-muted);
+}
+
+html[data-theme="dark"] .button--primary {
+  background: #e7f0ed;
+  color: #0b1210;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .overview-ai-control,
+html[data-theme="dark"] .daily-report-delivery,
+html[data-theme="dark"] .ai-action-box,
+html[data-theme="dark"] .inventory-bulk-action {
+  background:
+    linear-gradient(135deg, rgba(80, 209, 167, 0.1), rgba(23, 29, 28, 0.96)),
+    var(--surface);
+}
+
+html[data-theme="dark"] .forecast-metric,
+html[data-theme="dark"] .report-panel {
+  background:
+    linear-gradient(180deg, rgba(28, 36, 34, 0.98), rgba(23, 29, 28, 0.98)),
+    var(--surface);
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .overview-ai-control input,
+html[data-theme="dark"] .ai-action-box__form input,
+html[data-theme="dark"] .search-field input,
+html[data-theme="dark"] .filter-bar select {
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+html[data-theme="dark"] td,
+html[data-theme="dark"] .forecast-metric p,
+html[data-theme="dark"] .scenario-bar span,
+html[data-theme="dark"] .markdown-report,
+html[data-theme="dark"] .markdown-report__p,
+html[data-theme="dark"] .markdown-report__list,
+html[data-theme="dark"] .markdown-report__td,
+html[data-theme="dark"] .report-panel ul,
+html[data-theme="dark"] .page-report-popover__body p,
+html[data-theme="dark"] .page-report-popover__body ul,
+html[data-theme="dark"] .message .markdown-report__h3,
+html[data-theme="dark"] .message .markdown-report__p,
+html[data-theme="dark"] .message .markdown-report__item,
+html[data-theme="dark"] .message .markdown-report__td {
+  color: var(--text-soft);
+}
+
+html[data-theme="dark"] tbody tr:hover,
+html[data-theme="dark"] .markdown-report__tbody .markdown-report__tr:hover {
+  background: var(--surface-muted);
+}
+
+html[data-theme="dark"] .markdown-report__thead,
+html[data-theme="dark"] .scenario-bar__track {
+  background: var(--surface-subtle);
+}
+
+html[data-theme="dark"] .forecast-line-chart {
+  border-color: var(--line);
+  background:
+    linear-gradient(180deg, rgba(118, 167, 255, 0.12), transparent),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 43px,
+      rgba(167, 179, 175, 0.12) 44px
+    );
+}
+
+html[data-theme="dark"] .projection-note--risk,
+html[data-theme="dark"] .daily-report-notice--error,
+html[data-theme="dark"] .report-warning {
+  border-color: rgba(224, 173, 88, 0.36);
+  background: #3a2c17;
+  color: #f0c77f;
+}
+
+html[data-theme="dark"] .projection-note--risk span {
+  color: #f0c77f;
+}
+
+html[data-theme="dark"] .message--ai {
+  border-color: rgba(80, 209, 167, 0.28);
+  background: #172923;
+}
+
+html[data-theme="dark"] .ai-action-box__answer {
+  background: rgba(28, 36, 34, 0.8);
+}
+
+html[data-theme="dark"] .status-badge--critical,
+html[data-theme="dark"] .status-badge--high {
+  color: #ffafa5;
+}
+
+html[data-theme="dark"] .status-badge--watch,
+html[data-theme="dark"] .status-badge--medium,
+html[data-theme="dark"] .status-badge--overtime-watch {
+  color: #f0c77f;
+}
+
+html[data-theme="dark"] .status-badge--safe,
+html[data-theme="dark"] .status-badge--low,
+html[data-theme="dark"] .status-badge--on-track,
+html[data-theme="dark"] .status-badge--normal {
+  color: #8ce9c8;
+}
+
+html[data-theme="dark"] .floating-chat-button {
+  border-color: rgba(80, 209, 167, 0.4);
+  background: var(--emerald);
+  color: #08130f;
+}
+
+html[data-theme="dark"] .floating-chat-panel .chat-input {
+  background: rgba(23, 29, 28, 0.98);
+}
+
+html[data-theme="dark"] .payroll-period-filter {
+  background: var(--surface-muted);
+}
+
+html[data-theme="dark"] .payroll-calendar-field {
+  background: var(--surface);
+}
+
 @media (max-width: 1180px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -2325,6 +2590,11 @@ tbody tr:hover {
     width: 100%;
   }
 
+  .sync-cluster .theme-toggle {
+    align-self: flex-start;
+    width: 42px;
+  }
+
   .overview-hero,
   .kpi-grid,
   .forecast-metrics,
@@ -2381,6 +2651,20 @@ tbody tr:hover {
     left: 16px;
     width: auto;
     max-height: calc(100vh - 120px);
+  }
+
+  .payroll-period-filter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .payroll-calendar-field {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .payroll-calendar-field input {
+    width: 100%;
   }
 
   .overview-hero {
