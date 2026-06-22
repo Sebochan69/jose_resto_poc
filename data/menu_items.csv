@@ -1,8 +1,8 @@
 menu_item,category,selling_price,food_cost,target_margin,sales_volume
-Beef Pares,Rice Meal,165,112,40,240
-Chicken Rice Bowl,Rice Meal,149,82,40,381
-Iced Tea,Beverage,49,11,65,520
-Burger Steak,Rice Meal,139,98,40,172
-Extra Rice,Add-on,25,9,60,307
-Fried Egg,Add-on,20,8,55,180
-Garlic Rice Upgrade,Add-on,35,14,55,92
+Beef Pares,Rice Meal,165,112,40,1467
+Chicken Rice Bowl,Rice Meal,149,82,40,2218
+Iced Tea,Beverage,49,11,65,3388
+Burger Steak,Rice Meal,139,98,40,1043
+Extra Rice,Add-on,25,9,60,1742
+Fried Egg,Add-on,20,8,55,1046
+Garlic Rice Upgrade,Add-on,35,14,55,604

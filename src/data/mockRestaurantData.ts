@@ -24,6 +24,8 @@ export interface ProfitLeak {
 export interface InventoryItem {
   id: string;
   item: string;
+  category?: string;
+  supplier?: string;
   currentStock: number;
   unit: string;
   dailyUsage: number;
@@ -35,6 +37,7 @@ export interface InventoryItem {
 export interface MenuItemProfitability {
   id: string;
   menuItem: string;
+  category?: string;
   sellingPrice: number;
   foodCost: number;
   targetMarginPercent: number;
@@ -106,11 +109,12 @@ export interface RestaurantData {
 }
 
 export const samplePrompts = [
-  "Why did profit drop this week?",
-  "What should I reorder today?",
-  "Is payroll too high?",
-  "Which menu item should I promote?",
-  "How much money are we leaking this week?",
+  "Why is profit almost zero even if revenue is high?",
+  "What should I fix first today?",
+  "Which item should I reorder first?",
+  "Which menu item is hurting margin?",
+  "Is payroll efficient this week?",
+  "What should I prepare for next week?",
 ];
 
 export const mockRestaurantData: RestaurantData = {
@@ -179,6 +183,8 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "inv-1",
       item: "Chicken thigh",
+      category: "Meat",
+      supplier: "ABC Poultry Supply",
       currentStock: 18,
       unit: "kg",
       dailyUsage: 11,
@@ -189,6 +195,8 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "inv-2",
       item: "Beef brisket",
+      category: "Meat",
+      supplier: "Prime Meat Trading",
       currentStock: 26,
       unit: "kg",
       dailyUsage: 8,
@@ -199,6 +207,8 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "inv-3",
       item: "Rice",
+      category: "Dry Goods",
+      supplier: "Bigas Center PH",
       currentStock: 90,
       unit: "kg",
       dailyUsage: 18,
@@ -209,6 +219,8 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "inv-4",
       item: "Garlic",
+      category: "Produce",
+      supplier: "Wet Market Supplier",
       currentStock: 4,
       unit: "kg",
       dailyUsage: 2.5,
@@ -219,6 +231,8 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "inv-5",
       item: "Cooking oil",
+      category: "Kitchen Supply",
+      supplier: "Golden Fry Distributor",
       currentStock: 24,
       unit: "L",
       dailyUsage: 5,
@@ -229,6 +243,8 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "inv-6",
       item: "Takeout containers",
+      category: "Packaging",
+      supplier: "PackPro PH",
       currentStock: 220,
       unit: "pcs",
       dailyUsage: 96,
@@ -241,6 +257,7 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "menu-1",
       menuItem: "Beef Pares",
+      category: "Rice Meal",
       sellingPrice: 165,
       foodCost: 72,
       targetMarginPercent: 62,
@@ -251,6 +268,7 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "menu-2",
       menuItem: "Crispy Chicken Rice",
+      category: "Rice Meal",
       sellingPrice: 145,
       foodCost: 59,
       targetMarginPercent: 61,
@@ -261,6 +279,7 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "menu-3",
       menuItem: "Garlic Beef Bowl",
+      category: "Rice Meal",
       sellingPrice: 189,
       foodCost: 68,
       targetMarginPercent: 64,
@@ -271,6 +290,7 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "menu-4",
       menuItem: "Pork Sisig Plate",
+      category: "Rice Meal",
       sellingPrice: 175,
       foodCost: 63,
       targetMarginPercent: 63,
@@ -281,6 +301,7 @@ export const mockRestaurantData: RestaurantData = {
     {
       id: "menu-5",
       menuItem: "Mango Float Cup",
+      category: "Dessert",
       sellingPrice: 95,
       foodCost: 31,
       targetMarginPercent: 65,
@@ -585,6 +606,18 @@ export const mockRestaurantData: RestaurantData = {
     },
   ],
   consultantResponses: {
+    "What should I prepare for next week?":
+      "Prepare for weekend demand, ingredient cost pressure, and inventory lead times. Lock critical stock, confirm staff coverage for peak periods, and run margin-safe bundles.",
+    "Is payroll efficient this week?":
+      "Payroll is above the target band. Treat this as a scheduling optimization issue: reduce low-traffic overlap, protect peak coverage, and move prep earlier to avoid closing overtime.",
+    "Which menu item is hurting margin?":
+      "Beef Pares is the clearest margin risk because it has strong demand but misses the target margin. Raise the price or reduce portion cost before the weekend rush.",
+    "Which item should I reorder first?":
+      "Reorder chicken thigh, garlic, and takeout containers first because they are closest to interrupting dinner and delivery sales.",
+    "What should I fix first today?":
+      "Fix the most immediate cash leak first: reorder critical inventory, then adjust the underpriced high-volume menu items and review weekday staffing coverage.",
+    "Why is profit almost zero even if revenue is high?":
+      "Revenue is high, but margin is being compressed by payroll over target, food-cost drift, and underpriced high-volume items. Start with menu pricing and weekday staffing before adding more promotions.",
     "Why did profit drop this week?":
       "Profit dropped because payroll ran above target on slower weekdays and Beef Pares is selling below its target margin. Fixing those two issues protects roughly PHP 20,000 to PHP 25,000 per week.",
     "What should I reorder today?":

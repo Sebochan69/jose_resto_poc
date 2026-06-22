@@ -1,9 +1,25 @@
+export type DashboardPage =
+  | "overview"
+  | "profit-leaks"
+  | "forecast"
+  | "inventory"
+  | "menu-pricing"
+  | "payroll"
+  | "reports";
+
+export type DataSourceMode =
+  | "Live n8n data"
+  | "Demo fallback data"
+  | "CSV sample data";
+
 export type ReportType =
   | "overall"
   | "inventory"
   | "menu"
   | "payroll"
   | "projection";
+
+export type DeliveryChannel = "email" | "telegram";
 
 export type RestoPilotEventPayload =
   | {
@@ -19,6 +35,12 @@ export type RestoPilotEventPayload =
   | {
       event: "refresh_dashboard";
       source: "dashboard";
+    }
+  | {
+      event: "send_daily_report";
+      source: "dashboard";
+      reportType: ReportType;
+      deliveryChannels: DeliveryChannel[];
     };
 
 export interface ForecastScenario {
@@ -56,22 +78,34 @@ export interface N8nReportResponse {
   forecast?: ForecastData | Record<string, unknown>;
 }
 
-export interface N8nAskAiResponse {
-  success: true;
-  event: "ask_ai";
-  answer: string;
-  metrics?: Record<string, unknown>;
-  intelligence?: Record<string, unknown>;
-  forecast?: ForecastData | Record<string, unknown>;
-}
-
-export interface N8nRefreshDashboardResponse {
-  success: true;
-  event: "refresh_dashboard";
+export interface AutomationDashboardPayload {
   generatedAt?: string;
   healthScore?: number;
   totalEstimatedLeakage?: number;
   metrics?: Record<string, unknown>;
   intelligence?: Record<string, unknown>;
   forecast?: ForecastData | Record<string, unknown>;
+}
+
+export interface N8nAskAiResponse extends AutomationDashboardPayload {
+  success: true;
+  event: "ask_ai";
+  generatedAt?: string;
+  question?: string;
+  answer: string;
+}
+
+export interface N8nRefreshDashboardResponse extends AutomationDashboardPayload {
+  success: true;
+  event: "refresh_dashboard";
+}
+
+export interface N8nSendDailyReportResponse extends AutomationDashboardPayload {
+  success: boolean;
+  event: "send_daily_report";
+  message: string;
+  deliveryChannels?: DeliveryChannel[];
+  emailTo?: string;
+  telegramChatId?: string;
+  fileName?: string;
 }

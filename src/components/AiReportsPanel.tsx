@@ -1,9 +1,19 @@
-import { AlertTriangle, FileText, LoaderCircle, RefreshCw } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  FileText,
+  LoaderCircle,
+  Mail,
+  MessageCircle,
+  RefreshCw,
+  Send,
+} from "lucide-react";
 import { useState } from "react";
 import type { AiReportTemplate } from "../data/mockRestaurantData";
-import { generateAiReport } from "../services/n8nApi";
-import type { ReportType } from "../types";
+import { generateAiReport, sendDailyReport } from "../services/n8nApi";
+import type { DeliveryChannel, ReportType } from "../types";
 import { formatCurrency } from "../utils/calculations";
+import { MarkdownReport } from "./MarkdownReport";
 import { SectionCard } from "./SectionCard";
 
 interface DisplayReport extends AiReportTemplate {
@@ -28,6 +38,18 @@ const reportButtonLabels: Record<ReportType, string> = {
   projection: "Generate Business Projection Report",
 };
 
+const deliveryChannelLabels: Record<DeliveryChannel, string> = {
+  email: "Email PDF report",
+  telegram: "Telegram summary",
+};
+
+const getSelectedDeliveryChannels = (
+  deliveryChannels: Record<DeliveryChannel, boolean>,
+) =>
+  (Object.entries(deliveryChannels) as Array<[DeliveryChannel, boolean]>)
+    .filter(([, isEnabled]) => isEnabled)
+    .map(([channel]) => channel);
+
 export function AiReportsPanel({ reports }: AiReportsPanelProps) {
   const [generatedReport, setGeneratedReport] = useState<DisplayReport>({
     ...reports[0],
@@ -35,6 +57,59 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
   });
   const [loadingReportType, setLoadingReportType] = useState<ReportType | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
+  const [deliveryChannels, setDeliveryChannels] = useState<
+    Record<DeliveryChannel, boolean>
+  >({
+    email: true,
+    telegram: true,
+  });
+  const [isSendingDailyReport, setIsSendingDailyReport] = useState(false);
+  const [dailyReportNotice, setDailyReportNotice] = useState<{
+    tone: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  const toggleDeliveryChannel = (channel: DeliveryChannel) => {
+    setDeliveryChannels((currentChannels) => ({
+      ...currentChannels,
+      [channel]: !currentChannels[channel],
+    }));
+  };
+
+  const sendDailyReportFromDashboard = async () => {
+    const selectedDeliveryChannels = getSelectedDeliveryChannels(deliveryChannels);
+
+    if (selectedDeliveryChannels.length === 0) {
+      setDailyReportNotice({
+        tone: "error",
+        message: "Select at least one delivery channel before sending.",
+      });
+      return;
+    }
+
+    setIsSendingDailyReport(true);
+    setDailyReportNotice(null);
+
+    try {
+      const response = await sendDailyReport("overall", selectedDeliveryChannels);
+
+      setDailyReportNotice({
+        tone: response.success ? "success" : "error",
+        message: response.message,
+      });
+    } catch (error) {
+      console.warn(error);
+      setDailyReportNotice({
+        tone: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Daily report could not be sent by live automation.",
+      });
+    } finally {
+      setIsSendingDailyReport(false);
+    }
+  };
 
   const generateReport = async (report: AiReportTemplate) => {
     setLoadingReportType(report.id);
@@ -96,6 +171,67 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
         </div>
       ) : null}
 
+      <div className="daily-report-delivery">
+        <div className="daily-report-delivery__copy">
+          <span>Daily dispatch</span>
+          <strong>Send Daily Report</strong>
+          <p>Route today's overall report through n8n automation.</p>
+        </div>
+
+        <div className="delivery-channel-row" aria-label="Delivery channels">
+          {(Object.keys(deliveryChannelLabels) as DeliveryChannel[]).map((channel) => {
+            const Icon = channel === "email" ? Mail : MessageCircle;
+
+            return (
+              <label className="delivery-channel" key={channel}>
+                <input
+                  checked={deliveryChannels[channel]}
+                  disabled={isSendingDailyReport}
+                  onChange={() => toggleDeliveryChannel(channel)}
+                  type="checkbox"
+                />
+                <span>
+                  <Icon aria-hidden="true" size={16} />
+                  {deliveryChannelLabels[channel]}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+
+        <button
+          className="button button--primary"
+          disabled={isSendingDailyReport}
+          onClick={() => void sendDailyReportFromDashboard()}
+          type="button"
+        >
+          {isSendingDailyReport ? (
+            <LoaderCircle
+              aria-hidden="true"
+              className="button-icon--spin"
+              size={17}
+            />
+          ) : (
+            <Send aria-hidden="true" size={17} />
+          )}
+          {isSendingDailyReport ? "Sending..." : "Send Daily Report"}
+        </button>
+      </div>
+
+      {dailyReportNotice ? (
+        <div
+          className={`daily-report-notice daily-report-notice--${dailyReportNotice.tone}`}
+          role="status"
+        >
+          {dailyReportNotice.tone === "success" ? (
+            <CheckCircle aria-hidden="true" size={16} />
+          ) : (
+            <AlertTriangle aria-hidden="true" size={16} />
+          )}
+          {dailyReportNotice.message}
+        </div>
+      ) : null}
+
       <div className="report-panel">
         <div className="report-panel__header">
           <div>
@@ -126,9 +262,11 @@ export function AiReportsPanel({ reports }: AiReportsPanelProps) {
           </div>
         ) : null}
 
-        <p className={generatedReport.reportText ? "report-panel__body" : undefined}>
-          {generatedReport.reportText ?? generatedReport.summary}
-        </p>
+        {generatedReport.reportText ? (
+          <MarkdownReport content={generatedReport.reportText} />
+        ) : (
+          <p>{generatedReport.summary}</p>
+        )}
 
         {!generatedReport.reportText ? (
           <div className="report-panel__columns">

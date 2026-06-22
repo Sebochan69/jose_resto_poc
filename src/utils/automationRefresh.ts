@@ -10,9 +10,9 @@ import type {
   Severity,
 } from "../data/mockRestaurantData";
 import type {
+  AutomationDashboardPayload,
   ForecastData,
   ForecastScenario,
-  N8nRefreshDashboardResponse,
 } from "../types";
 
 interface AppliedAutomationRefresh {
@@ -247,6 +247,8 @@ const normalizeInventory = (
     return {
       id: pickString(row, ["id"], `inv-${index + 1}`),
       item: pickString(row, ["item", "name"], "Inventory item"),
+      category: pickString(row, ["category", "type"], "Core item"),
+      supplier: pickString(row, ["supplier", "vendor"], "Preferred supplier"),
       currentStock,
       unit,
       dailyUsage,
@@ -276,6 +278,7 @@ const normalizeMenuProfitability = (
   return rows.map((row, index) => ({
     id: pickString(row, ["id"], `menu-${index + 1}`),
     menuItem: pickString(row, ["menuItem", "menu_item", "name"], "Menu item"),
+    category: pickString(row, ["category", "type"], "Menu item"),
     sellingPrice: pickNumber(row, ["sellingPrice", "selling_price", "price"], 0),
     foodCost: pickNumber(row, ["foodCost", "food_cost", "cost"], 0),
     targetMarginPercent: pickNumber(
@@ -425,7 +428,7 @@ const normalizeBusinessProjection = (
 
 export const applyAutomationRefresh = (
   currentData: RestaurantData,
-  response: N8nRefreshDashboardResponse,
+  response: AutomationDashboardPayload,
 ): AppliedAutomationRefresh => {
   const metrics = isObject(response.metrics) ? response.metrics : undefined;
   const intelligence = isObject(response.intelligence)

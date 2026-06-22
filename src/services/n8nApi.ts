@@ -1,7 +1,9 @@
 import type {
+  DeliveryChannel,
   N8nAskAiResponse,
   N8nRefreshDashboardResponse,
   N8nReportResponse,
+  N8nSendDailyReportResponse,
   ReportType,
   RestoPilotEventPayload,
 } from "../types";
@@ -107,4 +109,33 @@ export async function refreshDashboardFromAutomation(): Promise<N8nRefreshDashbo
   }
 
   return data as unknown as N8nRefreshDashboardResponse;
+}
+
+export async function sendDailyReport(
+  reportType: ReportType,
+  deliveryChannels: DeliveryChannel[],
+): Promise<N8nSendDailyReportResponse> {
+  if (deliveryChannels.length === 0) {
+    throw new Error("Select at least one delivery channel before sending.");
+  }
+
+  const data = await sendRestoPilotEvent({
+    event: "send_daily_report",
+    source: "dashboard",
+    reportType,
+    deliveryChannels,
+  });
+
+  if (
+    !isObject(data) ||
+    typeof data.success !== "boolean" ||
+    data.event !== "send_daily_report" ||
+    typeof data.message !== "string"
+  ) {
+    throw new Error(
+      "n8n send_daily_report response was not in the expected shape.",
+    );
+  }
+
+  return data as unknown as N8nSendDailyReportResponse;
 }

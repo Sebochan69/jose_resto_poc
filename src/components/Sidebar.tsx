@@ -1,7 +1,5 @@
 import {
   AlertTriangle,
-  BarChart3,
-  Bot,
   FileText,
   Gauge,
   LayoutDashboard,
@@ -10,23 +8,36 @@ import {
   Utensils,
   Users,
 } from "lucide-react";
+import type { DashboardPage } from "../types";
 
-const navItems = [
-  { href: "#overview", label: "Overview", icon: LayoutDashboard },
-  { href: "#profit-leaks", label: "Profit Leaks", icon: AlertTriangle },
-  { href: "#forecast-simulator", label: "Forecast", icon: TrendingUp },
-  { href: "#inventory", label: "Inventory", icon: Package },
-  { href: "#menu-pricing", label: "Menu Pricing", icon: Utensils },
-  { href: "#payroll", label: "Payroll", icon: Users },
-  { href: "#projections", label: "Projections", icon: BarChart3 },
-  { href: "#ai-reports", label: "AI Reports", icon: FileText },
-  { href: "#ai-consultant", label: "AI Consultant", icon: Bot },
+interface SidebarProps {
+  activePage: DashboardPage;
+  onPageChange: (page: DashboardPage) => void;
+}
+
+const navItems: Array<{
+  page: DashboardPage;
+  label: string;
+  icon: typeof LayoutDashboard;
+}> = [
+  { page: "overview", label: "Overview", icon: LayoutDashboard },
+  { page: "profit-leaks", label: "Profit Leaks", icon: AlertTriangle },
+  { page: "forecast", label: "Forecast", icon: TrendingUp },
+  { page: "inventory", label: "Inventory", icon: Package },
+  { page: "menu-pricing", label: "Menu Pricing", icon: Utensils },
+  { page: "payroll", label: "Payroll", icon: Users },
+  { page: "reports", label: "Reports", icon: FileText },
 ];
 
-export function Sidebar() {
+export function Sidebar({ activePage, onPageChange }: SidebarProps) {
   return (
     <aside className="sidebar">
-      <a className="brand" href="#overview" aria-label="JOSE RESTO POC overview">
+      <button
+        className="brand"
+        onClick={() => onPageChange("overview")}
+        type="button"
+        aria-label="JOSE RESTO POC overview"
+      >
         <span className="brand__mark">
           <Gauge aria-hidden="true" size={22} />
         </span>
@@ -34,14 +45,20 @@ export function Sidebar() {
           <strong>JOSE RESTO</strong>
           <small>POC Control Room</small>
         </span>
-      </a>
+      </button>
 
-      <nav className="nav" aria-label="Dashboard sections">
-        {navItems.map(({ href, label, icon: Icon }) => (
-          <a href={href} key={href}>
+      <nav className="nav" aria-label="Dashboard pages">
+        {navItems.map(({ page, label, icon: Icon }) => (
+          <button
+            aria-current={activePage === page ? "page" : undefined}
+            className={activePage === page ? "nav__item nav__item--active" : "nav__item"}
+            key={page}
+            onClick={() => onPageChange(page)}
+            type="button"
+          >
             <Icon aria-hidden="true" size={18} />
             <span>{label}</span>
-          </a>
+          </button>
         ))}
       </nav>
     </aside>

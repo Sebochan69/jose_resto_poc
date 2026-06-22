@@ -1,11 +1,13 @@
 item,category,current_stock,unit,daily_usage,reorder_level,cost_per_unit,supplier
-Chicken,Meat,18,kg,7,20,180,ABC Poultry Supply
-Beef,Meat,12,kg,5,15,320,Prime Meat Trading
-Cooking Oil,Kitchen Supply,9,L,3,10,145,Golden Fry Distributor
-Rice,Dry Goods,45,kg,12,25,58,Bigas Center PH
-Iced Tea Powder,Beverage,8,pack,1.5,5,220,Beverage Hub
-Burger Patty,Meat,28,pcs,10,20,38,Frozen Goods Supplier
-Eggs,Dairy,90,pcs,25,60,8,Local Egg Farm
-Soy Sauce,Condiments,6,L,1,5,75,KitchenMart
-Takeout Box,Packaging,85,pcs,35,100,6,PackPro PH
-Garlic,Produce,4,kg,1.2,5,110,Wet Market Supplier
+Chicken,Meat,19.5,kg,8.13,20,180,ABC Poultry Supply
+Beef,Meat,11.9,kg,4.4,15,320,Prime Meat Trading
+Cooking Oil,Kitchen Supply,53.5,L,17.26,10,145,Golden Fry Distributor
+Rice,Dry Goods,134.9,kg,30.65,25,58,Bigas Center PH
+Iced Tea Powder,Beverage,2.0,pack,0.34,5,220,Beverage Hub
+Burger Patty,Meat,87,pcs,34.77,20,38,Frozen Goods Supplier
+Eggs,Dairy,170,pcs,43.56,60,8,Local Egg Farm
+Soy Sauce,Condiments,9.1,L,1.47,5,75,KitchenMart
+Takeout Box,Packaging,209,pcs,80.56,100,6,PackPro PH
+Garlic,Produce,3.7,kg,1.24,5,110,Wet Market Supplier
+Softdrinks,Beverage,91,bottle,18.54,80,22,Beverage Hub
+Napkins,Packaging,262.4,pack,69.05,30,45,PackPro PH

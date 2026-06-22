@@ -1,26 +1,163 @@
 date,branch,employee_name,role,shift,days_worked,daily_rate,ot_pay,deductions,gross_pay,net_pay
+2026-06-01,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-01,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-01,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-01,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-01,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-02,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-02,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-02,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-02,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-02,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-03,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-03,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-03,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-03,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-03,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-04,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-04,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-04,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-04,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-04,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-05,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-05,Main,Mark Santos,Cook,Closing,1,850,250,100,1100,1000
+2026-06-05,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,100,50,700,650
+2026-06-05,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-05,Main,Nico Dizon,Rider,Dinner,1,550,80,30,630,600
+2026-06-05,Main,Maya Flores,Cashier,Dinner,1,650,100,50,750,700
+2026-06-06,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-06,Main,Mark Santos,Cook,Closing,1,850,120,100,970,870
+2026-06-06,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-06,Main,Grace Lim,Server,Dinner,1,650,150,50,800,750
+2026-06-06,Main,Nico Dizon,Rider,Dinner,1,550,80,30,630,600
+2026-06-06,Main,Maya Flores,Cashier,Dinner,1,650,100,50,750,700
+2026-06-06,Main,Jun Dela Cruz,Kitchen Helper,Closing,1,600,80,50,680,630
+2026-06-07,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-07,Main,Mark Santos,Cook,Closing,1,850,250,100,1100,1000
+2026-06-07,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-07,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-07,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-08,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-08,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-08,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-08,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-08,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-09,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-09,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-09,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-09,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-09,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-10,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-10,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-10,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-10,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-10,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-11,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-11,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-11,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-11,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-11,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-12,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-12,Main,Mark Santos,Cook,Closing,1,850,150,100,1000,900
+2026-06-12,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,100,50,700,650
+2026-06-12,Main,Grace Lim,Server,Dinner,1,650,80,50,730,680
+2026-06-12,Main,Nico Dizon,Rider,Dinner,1,550,100,30,650,620
+2026-06-12,Main,Maya Flores,Cashier,Dinner,1,650,150,50,800,750
+2026-06-13,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-13,Main,Mark Santos,Cook,Closing,1,850,220,100,1070,970
+2026-06-13,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,100,50,700,650
+2026-06-13,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-13,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-13,Main,Maya Flores,Cashier,Dinner,1,650,120,50,770,720
+2026-06-13,Main,Jun Dela Cruz,Kitchen Helper,Closing,1,600,80,50,680,630
+2026-06-14,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-14,Main,Mark Santos,Cook,Closing,1,850,120,100,970,870
+2026-06-14,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-14,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-14,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-15,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-15,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-15,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-15,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-15,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-16,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-16,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-16,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-16,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-16,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
 2026-06-17,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
-2026-06-17,Main,Mark Santos,Cook,Closing,1,850,120,100,970,870
+2026-06-17,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
 2026-06-17,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
-2026-06-17,Main,Grace Lim,Server,Dinner,1,650,80,50,730,680
+2026-06-17,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
 2026-06-17,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
 2026-06-18,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
-2026-06-18,Main,Mark Santos,Cook,Closing,1,850,150,100,1000,900
+2026-06-18,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
 2026-06-18,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
 2026-06-18,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
-2026-06-18,Main,Nico Dizon,Rider,Dinner,1,550,60,30,610,580
+2026-06-18,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
 2026-06-19,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
-2026-06-19,Main,Mark Santos,Cook,Closing,1,850,180,100,1030,930
+2026-06-19,Main,Mark Santos,Cook,Closing,1,850,120,100,970,870
 2026-06-19,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,100,50,700,650
-2026-06-19,Main,Grace Lim,Server,Dinner,1,650,120,50,770,720
-2026-06-19,Main,Nico Dizon,Rider,Dinner,1,550,80,30,630,600
-2026-06-20,Main,Ana Reyes,Cashier,Lunch,1,650,100,50,750,700
-2026-06-20,Main,Mark Santos,Cook,Closing,1,850,250,100,1100,1000
-2026-06-20,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,120,50,720,670
-2026-06-20,Main,Grace Lim,Server,Dinner,1,650,150,50,800,750
-2026-06-20,Main,Nico Dizon,Rider,Dinner,1,550,100,30,650,620
+2026-06-19,Main,Grace Lim,Server,Dinner,1,650,80,50,730,680
+2026-06-19,Main,Nico Dizon,Rider,Dinner,1,550,100,30,650,620
+2026-06-19,Main,Maya Flores,Cashier,Dinner,1,650,80,50,730,680
+2026-06-20,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-20,Main,Mark Santos,Cook,Closing,1,850,220,100,1070,970
+2026-06-20,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,150,50,750,700
+2026-06-20,Main,Grace Lim,Server,Dinner,1,650,120,50,770,720
+2026-06-20,Main,Nico Dizon,Rider,Dinner,1,550,150,30,700,670
+2026-06-20,Main,Maya Flores,Cashier,Dinner,1,650,0,50,650,600
+2026-06-20,Main,Jun Dela Cruz,Kitchen Helper,Closing,1,600,60,50,660,610
 2026-06-21,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
-2026-06-21,Main,Mark Santos,Cook,Closing,1,850,200,100,1050,950
-2026-06-21,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,80,50,680,630
-2026-06-21,Main,Grace Lim,Server,Dinner,1,650,100,50,750,700
+2026-06-21,Main,Mark Santos,Cook,Closing,1,850,120,100,970,870
+2026-06-21,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-21,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
 2026-06-21,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-22,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-22,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-22,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-22,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-22,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-23,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-23,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-23,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-23,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-23,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-24,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-24,Main,Mark Santos,Cook,Closing,1,850,150,100,1000,900
+2026-06-24,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,80,50,680,630
+2026-06-24,Main,Grace Lim,Server,Dinner,1,650,150,50,800,750
+2026-06-24,Main,Nico Dizon,Rider,Dinner,1,550,80,30,630,600
+2026-06-25,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-25,Main,Mark Santos,Cook,Closing,1,850,120,100,970,870
+2026-06-25,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,150,50,750,700
+2026-06-25,Main,Grace Lim,Server,Dinner,1,650,150,50,800,750
+2026-06-25,Main,Nico Dizon,Rider,Dinner,1,550,80,30,630,600
+2026-06-26,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-26,Main,Mark Santos,Cook,Closing,1,850,220,100,1070,970
+2026-06-26,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,80,50,680,630
+2026-06-26,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-26,Main,Nico Dizon,Rider,Dinner,1,550,100,30,650,620
+2026-06-26,Main,Maya Flores,Cashier,Dinner,1,650,100,50,750,700
+2026-06-27,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-27,Main,Mark Santos,Cook,Closing,1,850,120,100,970,870
+2026-06-27,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,100,50,700,650
+2026-06-27,Main,Grace Lim,Server,Dinner,1,650,80,50,730,680
+2026-06-27,Main,Nico Dizon,Rider,Dinner,1,550,80,30,630,600
+2026-06-27,Main,Maya Flores,Cashier,Dinner,1,650,0,50,650,600
+2026-06-27,Main,Jun Dela Cruz,Kitchen Helper,Closing,1,600,80,50,680,630
+2026-06-28,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-28,Main,Mark Santos,Cook,Closing,1,850,250,100,1100,1000
+2026-06-28,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-28,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-28,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-29,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-29,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-29,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-29,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-29,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520
+2026-06-30,Main,Ana Reyes,Cashier,Lunch,1,650,0,50,650,600
+2026-06-30,Main,Mark Santos,Cook,Closing,1,850,0,100,850,750
+2026-06-30,Main,Leo Cruz,Kitchen Helper,Dinner,1,600,0,50,600,550
+2026-06-30,Main,Grace Lim,Server,Dinner,1,650,0,50,650,600
+2026-06-30,Main,Nico Dizon,Rider,Dinner,1,550,0,30,550,520

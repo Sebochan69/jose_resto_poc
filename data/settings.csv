@@ -6,4 +6,3 @@ critical_stock_days,3
 watch_stock_days,5
 target_health_score,80
 default_branch,Main
-currency,PHP

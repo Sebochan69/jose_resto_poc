@@ -1,26 +1,211 @@
 date,branch,menu_item,quantity_sold,selling_price,revenue
-2026-06-17,Main,Beef Pares,42,165,6930
-2026-06-17,Main,Chicken Rice Bowl,65,149,9685
-2026-06-17,Main,Iced Tea,80,49,3920
-2026-06-17,Main,Burger Steak,31,139,4309
-2026-06-17,Main,Extra Rice,46,25,1150
-2026-06-18,Main,Beef Pares,46,165,7590
-2026-06-18,Main,Chicken Rice Bowl,72,149,10728
-2026-06-18,Main,Iced Tea,95,49,4655
-2026-06-18,Main,Burger Steak,28,139,3892
+2026-06-01,Main,Beef Pares,36,165,5940
+2026-06-01,Main,Chicken Rice Bowl,47,149,7003
+2026-06-01,Main,Iced Tea,68,49,3332
+2026-06-01,Main,Burger Steak,23,139,3197
+2026-06-01,Main,Extra Rice,44,25,1100
+2026-06-01,Main,Fried Egg,28,20,560
+2026-06-01,Main,Garlic Rice Upgrade,13,35,455
+2026-06-02,Main,Beef Pares,33,165,5445
+2026-06-02,Main,Chicken Rice Bowl,53,149,7897
+2026-06-02,Main,Iced Tea,79,49,3871
+2026-06-02,Main,Burger Steak,24,139,3336
+2026-06-02,Main,Extra Rice,41,25,1025
+2026-06-02,Main,Fried Egg,28,20,560
+2026-06-02,Main,Garlic Rice Upgrade,15,35,525
+2026-06-03,Main,Beef Pares,43,165,7095
+2026-06-03,Main,Chicken Rice Bowl,54,149,8046
+2026-06-03,Main,Iced Tea,91,49,4459
+2026-06-03,Main,Burger Steak,30,139,4170
+2026-06-03,Main,Extra Rice,46,25,1150
+2026-06-03,Main,Fried Egg,30,20,600
+2026-06-03,Main,Garlic Rice Upgrade,15,35,525
+2026-06-04,Main,Beef Pares,39,165,6435
+2026-06-04,Main,Chicken Rice Bowl,72,149,10728
+2026-06-04,Main,Iced Tea,93,49,4557
+2026-06-04,Main,Burger Steak,33,139,4587
+2026-06-04,Main,Extra Rice,54,25,1350
+2026-06-04,Main,Fried Egg,35,20,700
+2026-06-04,Main,Garlic Rice Upgrade,18,35,630
+2026-06-05,Main,Beef Pares,56,165,9240
+2026-06-05,Main,Chicken Rice Bowl,81,149,12069
+2026-06-05,Main,Iced Tea,131,49,6419
+2026-06-05,Main,Burger Steak,37,139,5143
+2026-06-05,Main,Extra Rice,64,25,1600
+2026-06-05,Main,Fried Egg,32,20,640
+2026-06-05,Main,Garlic Rice Upgrade,19,35,665
+2026-06-06,Main,Beef Pares,55,165,9075
+2026-06-06,Main,Chicken Rice Bowl,81,149,12069
+2026-06-06,Main,Iced Tea,131,49,6419
+2026-06-06,Main,Burger Steak,44,139,6116
+2026-06-06,Main,Extra Rice,68,25,1700
+2026-06-06,Main,Fried Egg,38,20,760
+2026-06-06,Main,Garlic Rice Upgrade,26,35,910
+2026-06-07,Main,Beef Pares,48,165,7920
+2026-06-07,Main,Chicken Rice Bowl,73,149,10877
+2026-06-07,Main,Iced Tea,100,49,4900
+2026-06-07,Main,Burger Steak,35,139,4865
+2026-06-07,Main,Extra Rice,51,25,1275
+2026-06-07,Main,Fried Egg,36,20,720
+2026-06-07,Main,Garlic Rice Upgrade,20,35,700
+2026-06-08,Main,Beef Pares,38,165,6270
+2026-06-08,Main,Chicken Rice Bowl,60,149,8940
+2026-06-08,Main,Iced Tea,82,49,4018
+2026-06-08,Main,Burger Steak,24,139,3336
+2026-06-08,Main,Extra Rice,38,25,950
+2026-06-08,Main,Fried Egg,24,20,480
+2026-06-08,Main,Garlic Rice Upgrade,16,35,560
+2026-06-09,Main,Beef Pares,43,165,7095
+2026-06-09,Main,Chicken Rice Bowl,57,149,8493
+2026-06-09,Main,Iced Tea,86,49,4214
+2026-06-09,Main,Burger Steak,27,139,3753
+2026-06-09,Main,Extra Rice,52,25,1300
+2026-06-09,Main,Fried Egg,26,20,520
+2026-06-09,Main,Garlic Rice Upgrade,16,35,560
+2026-06-10,Main,Beef Pares,40,165,6600
+2026-06-10,Main,Chicken Rice Bowl,66,149,9834
+2026-06-10,Main,Iced Tea,98,49,4802
+2026-06-10,Main,Burger Steak,30,139,4170
+2026-06-10,Main,Extra Rice,47,25,1175
+2026-06-10,Main,Fried Egg,33,20,660
+2026-06-10,Main,Garlic Rice Upgrade,15,35,525
+2026-06-11,Main,Beef Pares,41,165,6765
+2026-06-11,Main,Chicken Rice Bowl,72,149,10728
+2026-06-11,Main,Iced Tea,102,49,4998
+2026-06-11,Main,Burger Steak,32,139,4448
+2026-06-11,Main,Extra Rice,48,25,1200
+2026-06-11,Main,Fried Egg,36,20,720
+2026-06-11,Main,Garlic Rice Upgrade,21,35,735
+2026-06-12,Main,Beef Pares,63,165,10395
+2026-06-12,Main,Chicken Rice Bowl,78,149,11622
+2026-06-12,Main,Iced Tea,144,49,7056
+2026-06-12,Main,Burger Steak,43,139,5977
+2026-06-12,Main,Extra Rice,70,25,1750
+2026-06-12,Main,Fried Egg,41,20,820
+2026-06-12,Main,Garlic Rice Upgrade,22,35,770
+2026-06-13,Main,Beef Pares,66,165,10890
+2026-06-13,Main,Chicken Rice Bowl,113,149,16837
+2026-06-13,Main,Iced Tea,171,49,8379
+2026-06-13,Main,Burger Steak,45,139,6255
+2026-06-13,Main,Extra Rice,80,25,2000
+2026-06-13,Main,Fried Egg,50,20,1000
+2026-06-13,Main,Garlic Rice Upgrade,28,35,980
+2026-06-14,Main,Beef Pares,51,165,8415
+2026-06-14,Main,Chicken Rice Bowl,77,149,11473
+2026-06-14,Main,Iced Tea,105,49,5145
+2026-06-14,Main,Burger Steak,37,139,5143
+2026-06-14,Main,Extra Rice,59,25,1475
+2026-06-14,Main,Fried Egg,37,20,740
+2026-06-14,Main,Garlic Rice Upgrade,18,35,630
+2026-06-15,Main,Beef Pares,31,165,5115
+2026-06-15,Main,Chicken Rice Bowl,60,149,8940
+2026-06-15,Main,Iced Tea,81,49,3969
+2026-06-15,Main,Burger Steak,27,139,3753
+2026-06-15,Main,Extra Rice,40,25,1000
+2026-06-15,Main,Fried Egg,26,20,520
+2026-06-15,Main,Garlic Rice Upgrade,14,35,490
+2026-06-16,Main,Beef Pares,41,165,6765
+2026-06-16,Main,Chicken Rice Bowl,57,149,8493
+2026-06-16,Main,Iced Tea,93,49,4557
+2026-06-16,Main,Burger Steak,32,139,4448
+2026-06-16,Main,Extra Rice,45,25,1125
+2026-06-16,Main,Fried Egg,30,20,600
+2026-06-16,Main,Garlic Rice Upgrade,18,35,630
+2026-06-17,Main,Beef Pares,44,165,7260
+2026-06-17,Main,Chicken Rice Bowl,63,149,9387
+2026-06-17,Main,Iced Tea,95,49,4655
+2026-06-17,Main,Burger Steak,34,139,4726
+2026-06-17,Main,Extra Rice,49,25,1225
+2026-06-17,Main,Fried Egg,35,20,700
+2026-06-17,Main,Garlic Rice Upgrade,19,35,665
+2026-06-18,Main,Beef Pares,48,165,7920
+2026-06-18,Main,Chicken Rice Bowl,66,149,9834
+2026-06-18,Main,Iced Tea,94,49,4606
+2026-06-18,Main,Burger Steak,33,139,4587
 2026-06-18,Main,Extra Rice,58,25,1450
-2026-06-19,Main,Beef Pares,55,165,9075
-2026-06-19,Main,Chicken Rice Bowl,88,149,13112
-2026-06-19,Main,Iced Tea,120,49,5880
-2026-06-19,Main,Burger Steak,40,139,5560
-2026-06-19,Main,Extra Rice,72,25,1800
-2026-06-20,Main,Beef Pares,62,165,10230
-2026-06-20,Main,Chicken Rice Bowl,102,149,15198
-2026-06-20,Main,Iced Tea,155,49,7595
-2026-06-20,Main,Burger Steak,48,139,6672
-2026-06-20,Main,Extra Rice,91,25,2275
-2026-06-21,Main,Beef Pares,35,165,5775
-2026-06-21,Main,Chicken Rice Bowl,54,149,8046
-2026-06-21,Main,Iced Tea,70,49,3430
-2026-06-21,Main,Burger Steak,25,139,3475
-2026-06-21,Main,Extra Rice,40,25,1000
+2026-06-18,Main,Fried Egg,30,20,600
+2026-06-18,Main,Garlic Rice Upgrade,19,35,665
+2026-06-19,Main,Beef Pares,57,165,9405
+2026-06-19,Main,Chicken Rice Bowl,102,149,15198
+2026-06-19,Main,Iced Tea,156,49,7644
+2026-06-19,Main,Burger Steak,39,139,5421
+2026-06-19,Main,Extra Rice,68,25,1700
+2026-06-19,Main,Fried Egg,41,20,820
+2026-06-19,Main,Garlic Rice Upgrade,27,35,945
+2026-06-20,Main,Beef Pares,71,165,11715
+2026-06-20,Main,Chicken Rice Bowl,106,149,15794
+2026-06-20,Main,Iced Tea,177,49,8673
+2026-06-20,Main,Burger Steak,54,139,7506
+2026-06-20,Main,Extra Rice,77,25,1925
+2026-06-20,Main,Fried Egg,46,20,920
+2026-06-20,Main,Garlic Rice Upgrade,29,35,1015
+2026-06-21,Main,Beef Pares,54,165,8910
+2026-06-21,Main,Chicken Rice Bowl,82,149,12218
+2026-06-21,Main,Iced Tea,135,49,6615
+2026-06-21,Main,Burger Steak,33,139,4587
+2026-06-21,Main,Extra Rice,60,25,1500
+2026-06-21,Main,Fried Egg,39,20,780
+2026-06-21,Main,Garlic Rice Upgrade,19,35,665
+2026-06-22,Main,Beef Pares,40,165,6600
+2026-06-22,Main,Chicken Rice Bowl,60,149,8940
+2026-06-22,Main,Iced Tea,80,49,3920
+2026-06-22,Main,Burger Steak,27,139,3753
+2026-06-22,Main,Extra Rice,53,25,1325
+2026-06-22,Main,Fried Egg,31,20,620
+2026-06-22,Main,Garlic Rice Upgrade,15,35,525
+2026-06-23,Main,Beef Pares,49,165,8085
+2026-06-23,Main,Chicken Rice Bowl,72,149,10728
+2026-06-23,Main,Iced Tea,102,49,4998
+2026-06-23,Main,Burger Steak,35,139,4865
+2026-06-23,Main,Extra Rice,57,25,1425
+2026-06-23,Main,Fried Egg,29,20,580
+2026-06-23,Main,Garlic Rice Upgrade,17,35,595
+2026-06-24,Main,Beef Pares,47,165,7755
+2026-06-24,Main,Chicken Rice Bowl,78,149,11622
+2026-06-24,Main,Iced Tea,124,49,6076
+2026-06-24,Main,Burger Steak,35,139,4865
+2026-06-24,Main,Extra Rice,67,25,1675
+2026-06-24,Main,Fried Egg,36,20,720
+2026-06-24,Main,Garlic Rice Upgrade,26,35,910
+2026-06-25,Main,Beef Pares,51,165,8415
+2026-06-25,Main,Chicken Rice Bowl,81,149,12069
+2026-06-25,Main,Iced Tea,96,49,4704
+2026-06-25,Main,Burger Steak,34,139,4726
+2026-06-25,Main,Extra Rice,67,25,1675
+2026-06-25,Main,Fried Egg,37,20,740
+2026-06-25,Main,Garlic Rice Upgrade,19,35,665
+2026-06-26,Main,Beef Pares,65,165,10725
+2026-06-26,Main,Chicken Rice Bowl,98,149,14602
+2026-06-26,Main,Iced Tea,163,49,7987
+2026-06-26,Main,Burger Steak,42,139,5838
+2026-06-26,Main,Extra Rice,85,25,2125
+2026-06-26,Main,Fried Egg,39,20,780
+2026-06-26,Main,Garlic Rice Upgrade,28,35,980
+2026-06-27,Main,Beef Pares,69,165,11385
+2026-06-27,Main,Chicken Rice Bowl,102,149,15198
+2026-06-27,Main,Iced Tea,190,49,9310
+2026-06-27,Main,Burger Steak,49,139,6811
+2026-06-27,Main,Extra Rice,90,25,2250
+2026-06-27,Main,Fried Egg,52,20,1040
+2026-06-27,Main,Garlic Rice Upgrade,31,35,1085
+2026-06-28,Main,Beef Pares,60,165,9900
+2026-06-28,Main,Chicken Rice Bowl,76,149,11324
+2026-06-28,Main,Iced Tea,133,49,6517
+2026-06-28,Main,Burger Steak,36,139,5004
+2026-06-28,Main,Extra Rice,62,25,1550
+2026-06-28,Main,Fried Egg,37,20,740
+2026-06-28,Main,Garlic Rice Upgrade,23,35,805
+2026-06-29,Main,Beef Pares,38,165,6270
+2026-06-29,Main,Chicken Rice Bowl,64,149,9536
+2026-06-29,Main,Iced Tea,100,49,4900
+2026-06-29,Main,Burger Steak,34,139,4726
+2026-06-29,Main,Extra Rice,45,25,1125
+2026-06-29,Main,Fried Egg,27,20,540
+2026-06-29,Main,Garlic Rice Upgrade,21,35,735
+2026-06-30,Main,Beef Pares,50,165,8250
+2026-06-30,Main,Chicken Rice Bowl,67,149,9983
+2026-06-30,Main,Iced Tea,88,49,4312
+2026-06-30,Main,Burger Steak,35,139,4865
+2026-06-30,Main,Extra Rice,57,25,1425
+2026-06-30,Main,Fried Egg,37,20,740
+2026-06-30,Main,Garlic Rice Upgrade,17,35,595

@@ -1,21 +1,106 @@
 date,branch,expense_type,amount,notes
+2026-06-01,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-01,Main,Utilities,1825,Electricity and water estimate
+2026-06-01,Main,Packaging,1398,Takeout and dine-in packaging
+2026-06-01,Main,Cleaning Supplies,520,Kitchen and dining cleaning
+2026-06-02,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-02,Main,Utilities,1750,Electricity and water estimate
+2026-06-02,Main,Packaging,1389,Takeout and dine-in packaging
+2026-06-03,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-03,Main,Utilities,1749,Electricity and water estimate
+2026-06-03,Main,Packaging,1478,Takeout and dine-in packaging
+2026-06-04,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-04,Main,Utilities,1789,Electricity and water estimate
+2026-06-04,Main,Packaging,1507,Takeout and dine-in packaging
+2026-06-04,Main,Cleaning Supplies,680,Kitchen and dining cleaning
+2026-06-05,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-05,Main,Utilities,1786,Electricity and water estimate
+2026-06-05,Main,Packaging,1449,Takeout and dine-in packaging
+2026-06-05,Main,Marketing,1800,Local ads and promo materials
+2026-06-06,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-06,Main,Utilities,1958,Electricity and water estimate
+2026-06-06,Main,Packaging,1627,Takeout and dine-in packaging
+2026-06-07,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-07,Main,Utilities,1934,Electricity and water estimate
+2026-06-07,Main,Packaging,1528,Takeout and dine-in packaging
+2026-06-08,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-08,Main,Utilities,1777,Electricity and water estimate
+2026-06-08,Main,Packaging,1270,Takeout and dine-in packaging
+2026-06-08,Main,Cleaning Supplies,520,Kitchen and dining cleaning
+2026-06-09,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-09,Main,Utilities,1720,Electricity and water estimate
+2026-06-09,Main,Packaging,1324,Takeout and dine-in packaging
+2026-06-10,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-10,Main,Utilities,1704,Electricity and water estimate
+2026-06-10,Main,Packaging,1479,Takeout and dine-in packaging
+2026-06-10,Main,Maintenance,1350,Minor equipment maintenance
+2026-06-11,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-11,Main,Utilities,1819,Electricity and water estimate
+2026-06-11,Main,Packaging,1344,Takeout and dine-in packaging
+2026-06-11,Main,Cleaning Supplies,680,Kitchen and dining cleaning
+2026-06-12,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-12,Main,Utilities,1981,Electricity and water estimate
+2026-06-12,Main,Packaging,1529,Takeout and dine-in packaging
+2026-06-12,Main,Marketing,1200,Local ads and promo materials
+2026-06-13,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-13,Main,Utilities,2004,Electricity and water estimate
+2026-06-13,Main,Packaging,1600,Takeout and dine-in packaging
+2026-06-14,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-14,Main,Utilities,1841,Electricity and water estimate
+2026-06-14,Main,Packaging,1456,Takeout and dine-in packaging
+2026-06-15,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-15,Main,Utilities,1810,Electricity and water estimate
+2026-06-15,Main,Packaging,1259,Takeout and dine-in packaging
+2026-06-15,Main,Cleaning Supplies,450,Kitchen and dining cleaning
+2026-06-16,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-16,Main,Utilities,1815,Electricity and water estimate
+2026-06-16,Main,Packaging,1328,Takeout and dine-in packaging
 2026-06-17,Main,Rent Allocation,5700,Daily rent allocation
-2026-06-17,Main,Utilities,1800,Electricity and water estimate
-2026-06-17,Main,Packaging,1200,Takeout packaging
-2026-06-17,Main,Cleaning Supplies,650,Kitchen and dining cleaning
+2026-06-17,Main,Utilities,1955,Electricity and water estimate
+2026-06-17,Main,Packaging,1377,Takeout and dine-in packaging
 2026-06-18,Main,Rent Allocation,5700,Daily rent allocation
-2026-06-18,Main,Utilities,1900,Electricity and water estimate
-2026-06-18,Main,Packaging,1350,Takeout packaging
-2026-06-18,Main,Cleaning Supplies,450,Restock soap and sanitizer
+2026-06-18,Main,Utilities,1980,Electricity and water estimate
+2026-06-18,Main,Packaging,1378,Takeout and dine-in packaging
+2026-06-18,Main,Cleaning Supplies,450,Kitchen and dining cleaning
 2026-06-19,Main,Rent Allocation,5700,Daily rent allocation
-2026-06-19,Main,Utilities,2100,Electricity and water estimate
-2026-06-19,Main,Packaging,1500,Takeout packaging
-2026-06-19,Main,Marketing,1200,Weekend promo boost
+2026-06-19,Main,Utilities,1891,Electricity and water estimate
+2026-06-19,Main,Packaging,1724,Takeout and dine-in packaging
+2026-06-19,Main,Marketing,1500,Local ads and promo materials
 2026-06-20,Main,Rent Allocation,5700,Daily rent allocation
-2026-06-20,Main,Utilities,2600,Weekend electricity spike
-2026-06-20,Main,Packaging,1800,High takeout volume
-2026-06-20,Main,Marketing,1500,Saturday promo boost
+2026-06-20,Main,Utilities,1994,Electricity and water estimate
+2026-06-20,Main,Packaging,1764,Takeout and dine-in packaging
 2026-06-21,Main,Rent Allocation,5700,Daily rent allocation
-2026-06-21,Main,Utilities,1800,Electricity and water estimate
-2026-06-21,Main,Packaging,1000,Lower takeout volume
-2026-06-21,Main,Cleaning Supplies,500,Closing supplies
+2026-06-21,Main,Utilities,1903,Electricity and water estimate
+2026-06-21,Main,Packaging,1404,Takeout and dine-in packaging
+2026-06-22,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-22,Main,Utilities,1718,Electricity and water estimate
+2026-06-22,Main,Packaging,1374,Takeout and dine-in packaging
+2026-06-22,Main,Cleaning Supplies,680,Kitchen and dining cleaning
+2026-06-23,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-23,Main,Utilities,1900,Electricity and water estimate
+2026-06-23,Main,Packaging,1509,Takeout and dine-in packaging
+2026-06-23,Main,Maintenance,1350,Minor equipment maintenance
+2026-06-24,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-24,Main,Utilities,1973,Electricity and water estimate
+2026-06-24,Main,Packaging,1520,Takeout and dine-in packaging
+2026-06-25,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-25,Main,Utilities,2004,Electricity and water estimate
+2026-06-25,Main,Packaging,1383,Takeout and dine-in packaging
+2026-06-25,Main,Cleaning Supplies,680,Kitchen and dining cleaning
+2026-06-26,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-26,Main,Utilities,2148,Electricity and water estimate
+2026-06-26,Main,Packaging,1583,Takeout and dine-in packaging
+2026-06-26,Main,Marketing,1500,Local ads and promo materials
+2026-06-27,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-27,Main,Utilities,1920,Electricity and water estimate
+2026-06-27,Main,Packaging,1788,Takeout and dine-in packaging
+2026-06-28,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-28,Main,Utilities,1997,Electricity and water estimate
+2026-06-28,Main,Packaging,1405,Takeout and dine-in packaging
+2026-06-29,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-29,Main,Utilities,1952,Electricity and water estimate
+2026-06-29,Main,Packaging,1497,Takeout and dine-in packaging
+2026-06-29,Main,Cleaning Supplies,520,Kitchen and dining cleaning
+2026-06-30,Main,Rent Allocation,5700,Daily rent allocation
+2026-06-30,Main,Utilities,1898,Electricity and water estimate
+2026-06-30,Main,Packaging,1413,Takeout and dine-in packaging
